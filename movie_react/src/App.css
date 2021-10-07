@@ -1,0 +1,210 @@
+html {
+  background-color: #212529;
+  
+}
+
+.App {
+  text-align: center;
+  font-family : nanumsquare;
+  background: #212529;
+  color : white;
+  
+  height: 100vh;
+}
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.main-box {
+  position: relative;
+}
+.boxoffice {
+  position : relative;
+  
+  overflow-x: hidden;
+}
+
+.boxoffice-view {
+  width: 200%;
+  position : relative;
+}
+.trandlate50 {
+  transform : translateX(50%);
+}
+.translate-50 {
+  transform : translateX(-50%);
+}
+
+.boxoffice-cardset {
+  display : block;
+  margin : 0;
+  width: 50%;
+  float : left;
+  /* margin-left : 120px; */
+}
+
+
+.boxoffice-card {
+  display : block;
+  padding : 25px 10px;
+  width : 20%;
+  background: none;
+  float : left;
+  border : none;
+  
+}
+.boxoffice-bg {
+  width : 100%;
+  background : rgb(80, 80, 80, 0.5);
+  color : white;
+}
+.boxoffice-title {
+  font-weight : 600;
+  height : 30%;
+}
+.boxoffice-subtitle {
+  font-size : 10px;
+  padding-top : 5px;
+}
+.boxoffice-img {
+  width : 100%;
+  height : 320px;
+}
+.boxoffice-agebadge {
+  position : absolute;
+  width : 35px;
+  height : 35px;
+  color : white;
+  
+  font-weight : 700;
+  font-size : 18px;
+  padding-top : 6px;
+  padding-right : 3px;
+  margin : 0;
+  border-radius: 50px;
+  top : 30px;
+  right : 15px;
+
+}
+.boxoffice-rank {
+  font-family: BMDOHYEON;
+  position : absolute;
+  width : 75px;
+  height : 40px;
+  color : rgb(101, 31, 231);
+  font-weight : 600;
+  font-size : 60px;
+  top : -25px;
+  left : -10px;
+  
+}
+
+.boxoffice-content {
+  height : 10%;
+  padding-top : 3px;
+  margin : 0;
+  font-size : 15px;
+}
+
+.boxoffice-btn {
+  width : 100%;
+  
+}
+
+.boxoffice-btn button {
+  position: absolute;
+  width : 80px;
+  height : 100%;
+  
+  top : 0;
+  border : 0;
+  border-radius: 0;
+  color : #212529;
+}
+
+.boxoffice-btn .before:hover img{
+  border-radius: 50px;
+  color : white;
+  background: rgb(33,37,41);
+  background: linear-gradient(270deg, rgba(33,37,41,0) 0%, rgba(117,117,117,0.38139005602240894) 50%, rgba(117,117,117,1) 100%);
+}
+
+.boxoffice-btn .next:hover img{
+  border-radius: 50px;
+  color : white;
+  background: rgb(117,117,117);
+  background: linear-gradient(270deg, rgba(117,117,117,1) 0%, rgba(117,117,117,0.38139005602240894) 50%, rgba(33,37,41,0) 100%);
+}
+
+.boxoffice-btn .before{
+  left: -100px;
+}
+.boxoffice-btn .next{
+  right: -100px;
+}
+
+.boxoffice-btn img {
+  height : 70px;
+  width : 70px;
+  padding : 10px;
+}
+
+#dropdown-basic-button {
+ margin-top : 10px;
+ 
+}
+
+.age-all {
+  background-color: rgb(255, 217, 0);
+  font-size: 16px;
+}
+.age-12 {
+  background : rgb(0, 177, 0);
+}
+.age-15 {
+  background : rgb(0, 126, 245);
+}
+.age-19 {
+  background : rgb(221, 0, 0);
+}
+
+.boxoffice-rate {
+  font-size : 15px;
+  font-weight : 700;
+}
+
+.boxoffice-rate span {
+  font-size : 24px;
+  color : red;
+}
