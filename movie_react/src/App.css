@@ -4,7 +4,7 @@ html {
 }
 
 .App {
-  text-align: center;
+  /* text-align: center; */
   font-family : nanumsquare;
   background: #212529;
   color : white;
@@ -208,3 +208,43 @@ html {
   font-size : 24px;
   color : red;
 }
+
+/* search.js */
+.search-box {
+  border : 1px white solid;
+  border-radius: 10px;
+  padding : 20px;
+}
+
+.datepicker-style {
+  float :left;
+  margin : 0 5px;
+  padding-top : 3px;
+}
+
+.datepicker-style + div {
+  float :left;
+  margin : 0 5px;
+}
+
+.search-detail button{
+  color :#212529;
+  padding : 7px;
+  text-align: center;
+}
+.search-detail div {
+  color :#212529;
+  
+}
+.genreGroup{
+  padding : 0;
+}
+
+.react-datepicker__navigation {
+  top : 8px !important;
+}
+
+.react-datepicker-popper[data-placement^=bottom] .react-datepicker__triangle::after {
+  left : -220px !important;
+}
+
