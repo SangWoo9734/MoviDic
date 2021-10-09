@@ -17,8 +17,6 @@ const headers = {
 // DB Setting
 const MongoClient = require('mongodb').MongoClient;
 
-const url = 'https://movie.naver.com/movie/running/current.nhn';
-
 var db;
 MongoClient.connect("mongodb+srv://user:zxcv8430@cluster0.gwg1h.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
 function (error, client) {
@@ -44,9 +42,9 @@ app.set('view engine', 'ejs');
 // app.use('/', express.static( path.join(__dirname + '/movie_react/build')))
 app.use('/', express.static( path.join(__dirname + 'public')));
 
-const getHtml = async (url) => {
+const getHtml = async (url, params) => {
     try {
-        return await axios.get(url);
+        return await axios.get(url, params);
     } catch (error) {
         console.error(error);
     }
@@ -56,20 +54,6 @@ const getHtml = async (url) => {
 
 
 app.get('/public/top10', function(req, res) {
-    // 네이버 영화 검색 API 호출 코드
-    // axios.get('https://openapi.naver.com/v1/search/movie.json', {
-    //     params : {
-    //         query : 'black',
-    //     },
-    //     headers : headers,
-    // }).then(resonse => {
-    //     var json = resonse.data.items
-    //     // console.log(resonse.data.items);
-    //     res.render('index.ejs', {results : json})
-    // }).catch( error => {
-    //     console.log(error);
-    // })
-    // console.log(result);
 
     // 영화 진흥원 API 호출코드
     // axios.get('https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json', {
@@ -85,6 +69,8 @@ app.get('/public/top10', function(req, res) {
     // }).catch( error => {
     //     console.log(error);
     // })
+
+    const url = 'https://movie.naver.com/movie/running/current.nhn';
     var urls;
 
     getHtml(url)
@@ -176,6 +162,19 @@ app.get('/public/top10', function(req, res) {
 
     // res.sendFile( path.join( __dirname, "/react-project/build/index.html"));
     // res.render('index.ejs');
+})
+
+app.get('/public/searchList', function(req, res) {
+    // 네이버 영화 검색 API 호출 코드
+    getHtml('https://openapi.naver.com/v1/search/movie.json', {
+        params : {
+            query : 'black',
+        },
+        headers : headers,
+    }).then(resonse => {
+        var json = resonse.data.items;
+        return json;
+    }).then(result => {console.log('done'); res.json({result : result});});
 })
 
 app.get('/', function(req, res) {
