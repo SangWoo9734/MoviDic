@@ -22,8 +22,8 @@ function App() {
 						<span>MOVIEDIC</span>
 						</Navbar.Brand>
 						<Nav className="me-auto">
-						<Nav.Link href="#home">HOME</Nav.Link>
-						<Nav.Link href="#features">BOXOFFICE</Nav.Link>
+						<Nav.Link href="/">HOME</Nav.Link>
+						<Nav.Link href="/search">SEARCH</Nav.Link>
 						<Nav.Link href="#pricing">HISTORY</Nav.Link>
 						<Nav.Link href="#pricing">MY</Nav.Link>
 					</Nav>
@@ -36,11 +36,11 @@ function App() {
 				axios.get('local')
 			}}></button> */}
 
-			<Route expact path='/dd'>
+			<Route exact path='/'>
 				<Boxoffice />
 			</ Route>
 
-			<Route expact path='/'>
+			<Route exact path='/search'>
 				<Search />
 			</Route>
 		</div>

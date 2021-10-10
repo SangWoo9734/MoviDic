@@ -34,8 +34,10 @@ function (error, client) {
 
 
 app.use('/public', express.static('public'));
+app.use(bodyParser.urlencoded({ extended: false}));
 app.use(express.urlencoded({ extended: true }));
 app.use(cors())
+app.use(bodyParser.json());
 app.set('view engine', 'ejs');
 
 
@@ -156,7 +158,7 @@ app.get('/public/top10', function(req, res) {
             res.json({result : 'none'});
         }
         else {
-            res.json({result : movies})
+            res.json({result : movies}) 
         }
     })
 
@@ -165,16 +167,20 @@ app.get('/public/top10', function(req, res) {
 })
 
 app.get('/public/searchList', function(req, res) {
+    // console.log(req);
     // 네이버 영화 검색 API 호출 코드
     getHtml('https://openapi.naver.com/v1/search/movie.json', {
-        params : {
-            query : 'black',
-        },
+        params : req.query,
         headers : headers,
+
     }).then(resonse => {
         var json = resonse.data.items;
         return json;
-    }).then(result => {console.log('done'); res.json({result : result});});
+    }).then(result => {
+        console.log('done');
+        // res.json({result : result})
+        res.send(result);
+    });
 })
 
 app.get('/', function(req, res) {

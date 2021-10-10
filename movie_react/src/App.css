@@ -276,3 +276,46 @@ html {
   font-size : 17px;
   padding-top : 3px;
 }
+
+.searchResult-list {
+  width : 100%;
+  margin : auto;
+}
+
+.searchReuslt_movie {
+  display : block;
+  color :white;
+  -webkit-box-shadow: 4px 5px 10px 5px rgba(0,0,0,0.61); 
+  box-shadow: 4px 5px 10px 5px rgba(0,0,0,0.61);
+  height: 400px;
+  background: rgb(80, 80, 80, 0.5);
+  border-radius: 5px;
+
+}
+
+.searchReuslt_img {
+  width : 100%;
+  height : 60%;
+  position: relative;
+}
+
+.searchReuslt_img img {
+  object-fit: contain;
+  width : 100%;
+  max-height: 100%;
+  height : auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.searchReuslt_title {
+  font-size : 22px;
+  font-weight: 700;
+}
+.searchReuslt_sub {
+  font-size : 15px;
+  font-weight: 700;
+  color :rgb(148, 148, 148)
+}
