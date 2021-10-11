@@ -1,6 +1,6 @@
 html {
   background-color: #212529;
-  
+  font-family : nanumsquare;
 }
 
 .App {
@@ -285,12 +285,15 @@ html {
 .searchReuslt_movie {
   display : block;
   color :white;
-  -webkit-box-shadow: 4px 5px 10px 5px rgba(0,0,0,0.61); 
-  box-shadow: 4px 5px 10px 5px rgba(0,0,0,0.61);
   height: 400px;
   background: rgb(80, 80, 80, 0.5);
   border-radius: 5px;
-
+  position : relative;
+}
+.searchReuslt_movie:hover {
+  -webkit-box-shadow: 4px 5px 10px 5px rgba(0,0,0,0.61); 
+  box-shadow: 4px 5px 10px 5px rgba(0,0,0,0.61);
+  cursor :pointer;
 }
 
 .searchReuslt_img {
@@ -318,4 +321,12 @@ html {
   font-size : 15px;
   font-weight: 700;
   color :rgb(148, 148, 148)
+}
+.modal-body {
+  height : 300px;
+}
+.modal-img{
+  margin : auto;
+  height : 100%;
+  width : auto;
 }

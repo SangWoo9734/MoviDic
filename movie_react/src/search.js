@@ -1,4 +1,4 @@
-import { Form, Button, Row, Col, Accordion, Card } from 'react-bootstrap';
+import { Form, Button, Row, Col, Accordion, Card, Modal } from 'react-bootstrap';
 import React, { useEffect, useState }from 'react';
 import DatePicker from "react-datepicker";
 import axios from 'axios';
@@ -13,7 +13,10 @@ function Search() {
     
     
     var [genre, genre_change] = useState({
-        '드라마' : 1, '판타지' : 2, '서부': 3, '공포' : 4, '로맨스': 5, '모험':  6, '스릴러': 7, '느와르' : 8, '컬트' : 9, '다큐멘터리' : 10, '코미디' : 11, '가족' : 12, '미스터리' : 13, '전쟁' : 14, '애니메이션' : 15, '범죄' : 16, '뮤지컬' : 17, 'SF' : 18, '액션' : 19, '무협' : 20, '에로' : 21, '서스펜스' : 22, '서사' : 23, '블랙코미디' : 24, '실험' : 25, '영화카툰' : 26, '영화음악' : 27, '영화패러디포스터' : 28
+        '드라마' : 1, '판타지' : 2, '서부': 3, '공포' : 4, '로맨스': 5, '모험':  6, '스릴러': 7, '느와르' : 8,
+        '컬트' : 9, '다큐멘터리' : 10, '코미디' : 11, '가족' : 12, '미스터리' : 13, '전쟁' : 14, '애니메이션' : 15,
+        '범죄' : 16, '뮤지컬' : 17, 'SF' : 18, '액션' : 19, '무협' : 20, '에로' : 21, '서스펜스' : 22, '서사' : 23, '블랙코미디' : 24,
+        '실험' : 25, '영화카툰' : 26, '영화음악' : 27, '영화패러디포스터' : 28
     })
     
     var [searchWord, setSearchWord] = useState('');
@@ -24,6 +27,7 @@ function Search() {
     var [selectGenre, setSelectGenre] = useState(0);
     var [searchResult, searchResult_change] = useState([])
     var [showResult, showResult_change] = useState(false);
+    var [modalState, setModalState] = useState(false);
 
     const handlerSubmit = (e) => {
         e.preventDefault();
@@ -39,7 +43,6 @@ function Search() {
             showResult_change(false); // Component 재랜더링을 위해 검색결과를 없애기
             searchResult_change(res.data);
             showResult_change(true);
-            console.log(searchResult);
         });
     }
 
@@ -122,7 +125,7 @@ function Search() {
             
             {
                 showResult
-                ? <SearchResult result={searchResult}/>
+                ? <SearchResult result={searchResult} modalState={modalState} setModalState={setModalState}/>
                 : null
             }
             
@@ -133,6 +136,8 @@ function Search() {
 function SearchResult(props) {
 
     var [searchResult, searchResult_change] = useState(props.result);
+    var [modalData, setModalData] = useState({});
+
     return (
         <div className='container mt-5'>
             <div>
@@ -148,14 +153,52 @@ function SearchResult(props) {
                         searchResult.map(function(m, i) {
                             return (
                             <Col className="mt-3 mb-2" xs={6} md={4} lg={3} key={i}>
-                                <Movie source={m}/>
+                                <Movie source={m} setModalData={setModalData} setModalState = {props.setModalState}/>
                             </Col>
                             )
                         })
                     }
                 </Row>
             </div>
+
+            {
+                props.modalState
+                ? <Moviedetail modalState={props.modalState} onHide={() => props.setModalState(false)} modalData={modalData}/>
+                : null
+            }
+
         </div>
+    )
+}
+
+function Moviedetail(props) {
+    return (
+        <Modal
+            show = {props.modalState}
+            onHide = {props.onHide}
+            size='lg'
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+            // className = "modal-box"
+            >
+            <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter" className="modal-title">{props.modalData.title.split(/<b>|<\/b>/g).join("")}</Modal.Title>
+                <Modal.Title id="contained-modal-title-vcenter" className="modal-sub">{props.modalData.subtitle.split(/<b>|<\/b>/g).join("")}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Row>
+                    <Col xs={4} className="br-1">
+                        <img src={ props.modalData.image === "" ? no : props.modalData.image }/>
+                    </Col>
+                    <Col xs={8}>
+                    안녕못해요
+                    </Col>
+                </Row>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={props.onHide}>Close</Button>
+            </Modal.Footer>
+        </Modal>
     )
 }
 
@@ -164,19 +207,22 @@ function Movie(props) {
 
 
     return (
-        <div>
-            <Card  className="searchReuslt_movie">
-                    <div className="searchReuslt_img" >
-                        <Card.Img variant="top" src={ props.source.image === "" ? no : props.source.image } />
-                    </div>
-                    <Card.Body className="searchReuslt_content">
-                        <Card.Title className="searchReuslt_title">{props.source.title.split(/<b>|<\/b>/g).join("")}</Card.Title>
-                        <Card.Title className="searchReuslt_sub">{props.source.subtitle.split(/<b>|<\/b>/g).join("")}</Card.Title>
-                        <Card.Text className="searchReuslt_sub">{props.source.director.split("|").slice(0, -1).join()}</Card.Text>
-                        {/* <Card.Text>{props.source.actor.split("|").slice(0, -1).join()}</Card.Text> */}
-                    </Card.Body>
-                </Card>
-        </div>
+        <Card  className="searchReuslt_movie" onClick={() => {
+            props.setModalData(props.source);
+            props.setModalState(true);
+        }}>
+            <div className="searchReuslt_img" >
+                <Card.Img variant="top" src={ props.source.image === "" ? no : props.source.image } />
+            </div>
+            <Card.Body className="searchReuslt_content">
+                <Card.Title className="searchReuslt_title">{props.source.title.split(/<b>|<\/b>/g).join("")}</Card.Title>
+                <Card.Title className="searchReuslt_sub">{props.source.subtitle.split(/<b>|<\/b>/g).join("")}</Card.Title>
+                <Card.Text className="searchReuslt_sub">{props.source.director.split("|").slice(0, -1).join()}</Card.Text>
+                {/* <Card.Text>{props.source.actor.split("|").slice(0, -1).join()}</Card.Text> */}
+            </Card.Body>
+                
+            <div className='cover'></div>
+        </Card>
     )
 
 }
