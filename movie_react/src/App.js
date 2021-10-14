@@ -17,12 +17,11 @@ function App() {
 		<div className="App">
 			<Navbar bg="dark" variant="dark">
 				<Container className='text-center'>
-					<Navbar.Brand href="#home">
-						<img src={whale} style={{width: '40px', height : '40px'}}/>
+						<Navbar.Brand href="/">
+						<img src={whale} style={{width: '40px', height : '40px', marginRight : '10px'}} />
 						<span>MOVIEDIC</span>
 						</Navbar.Brand>
 						<Nav className="me-auto">
-						<Nav.Link href="/">HOME</Nav.Link>
 						<Nav.Link href="/search">SEARCH</Nav.Link>
 						<Nav.Link href="#pricing">HISTORY</Nav.Link>
 						<Nav.Link href="#pricing">MY</Nav.Link>
@@ -43,6 +42,10 @@ function App() {
 			<Route exact path='/search'>
 				<Search />
 			</Route>
+
+			<div className='footer'>
+				<p>CopyRight By Sangwoo</p>
+			</div>
 		</div>
 	);
 }

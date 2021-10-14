@@ -8,8 +8,9 @@ html {
   font-family : nanumsquare;
   background: #212529;
   color : white;
-  
-  height: 100vh;
+  min-height: calc(100vh - 140px);
+  height : fit-content;
+  position: relative;
 }
 .App-logo {
   height: 40vmin;
@@ -91,7 +92,11 @@ html {
 }
 .boxoffice-title {
   font-weight : 600;
-  height : 30%;
+  width : 100%;
+  height : 25px;
+  overflow : hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .boxoffice-subtitle {
   font-size : 10px;
@@ -264,7 +269,7 @@ html {
 .search-year {
   margin : 8px;
   width : fit-content;
-  height : 30px;
+  height : fit-content;
   border-radius: 10px;
 
 }
@@ -282,7 +287,7 @@ html {
   margin : auto;
 }
 
-.searchReuslt_movie {
+.searchResult_movie {
   display : block;
   color :white;
   height: 400px;
@@ -290,38 +295,62 @@ html {
   border-radius: 5px;
   position : relative;
 }
-.searchReuslt_movie:hover {
+.searchResult_movie:hover {
   -webkit-box-shadow: 4px 5px 10px 5px rgba(0,0,0,0.61); 
   box-shadow: 4px 5px 10px 5px rgba(0,0,0,0.61);
   cursor :pointer;
 }
 
-.searchReuslt_img {
+
+.searchResult_img {
   width : 100%;
   height : 60%;
   position: relative;
 }
 
-.searchReuslt_img img {
+.searchResult_img img {
   object-fit: contain;
   width : 100%;
   max-height: 100%;
   height : auto;
   position: absolute;
+  padding : 10px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
-.searchReuslt_title {
+.searchResult_title {
   font-size : 22px;
   font-weight: 700;
+  width : 210px;
+  height : 25px;
+  overflow : hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap
 }
-.searchReuslt_sub {
+.searchResult_subtitle {
   font-size : 15px;
   font-weight: 700;
+  width : 210px;
+  height : 17px;
+  overflow : hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color :rgb(148, 148, 148);
+}
+.searchResult_info:first {
+  margin-top : 10px;
+}
+.searchResult_info {
+  font-size : 15px;
+  font-weight: 700;
+  margin-top : 5px;
+  margin-bottom : 5px;
   color :rgb(148, 148, 148)
 }
+
+
 .modal-body {
   height : 300px;
 }
@@ -329,4 +358,62 @@ html {
   margin : auto;
   height : 100%;
   width : auto;
+}
+
+.modal-box>div {
+  max-height : 400px;
+  max-width : 1000px !important;
+}
+
+.modal-content {
+  height : 800px;
+}
+
+.footer {
+  width : 100%;
+  height : 70px;
+  text-align: center;
+  background :rgb(6, 21, 36);
+  position :absolute;
+  bottom : -140px;
+  display : flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar {
+  background :rgb(6, 21, 36) !important;
+}
+
+.pagination {
+  align-items: center;
+  justify-content: center;
+  margin-top : 30px;
+  margin-bottom : 50px;
+}
+
+.top-box {
+  display : flex;
+  flex-direction: row;
+  justify-content:space-between;
+}
+
+.top-box * {
+  display : block;
+}
+
+.quote-content {
+  font-family: 'iropkeBatangM';
+  font-size: 18px;
+  color :rgb(129, 129, 129);
+  font-style: italic;
+  text-align: right;
+}
+.quote-info {
+  margin-top : 10px;
+  font-family: 'iropkeBatangM';
+  font-size: 15px;
+  color :rgb(129, 129, 129);
+  font-style: italic;
+  text-align: right;
 }

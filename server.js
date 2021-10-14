@@ -172,15 +172,21 @@ app.get('/public/searchList', function(req, res) {
     getHtml('https://openapi.naver.com/v1/search/movie.json', {
         params : req.query,
         headers : headers,
-
     }).then(resonse => {
         var json = resonse.data.items;
         return json;
     }).then(result => {
         console.log('done');
-        // res.json({result : result})
         res.send(result);
     });
+})
+
+app.get('/public/quote', function(req, res) {
+    // console.log(typeof req.query.q);
+    db.collection('quote').findOne({'num': parseInt(req.query.q)})
+    .then(result => {
+        res.send(result);
+    })
 })
 
 app.get('/', function(req, res) {

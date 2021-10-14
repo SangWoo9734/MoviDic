@@ -29,31 +29,11 @@ function Boxoffice() {
 				var json = response.data.result;
 				top10_change(json);
 				console.log(json);
-				// var json = resonse.data.boxOfficeResult.dailyBoxOfficeList
 			})
 
 		} catch {
 			// 오류 발생시 실행
 		}
-		
-		// 네이버 영화 크롤링
-		
-	// 	axios.get('https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json', {
-	// 		params : {
-	// 			key : '36fcb6727085802f6401dc96e6743cf4',
-	// 			targetDt : 20211002,
-	// 		},
-	// 		// headers : headers,
-	// 	}).then(resonse => {
-	// 		var json = resonse.data.boxOfficeResult.dailyBoxOfficeList
-
-	// 		top10_change(json);
-	// 		// console.log(resonse.data.boxOfficeResult.dailyBoxOfficeList);
-	// 	}).catch( error => {
-	// 		console.log(error);
-	// 	})
-
-	// }, [page]);
 	}, [page]);
 
     return (
@@ -69,8 +49,8 @@ function Boxoffice() {
                                         <Card.Img variant="top" className="boxoffice-img" src={movie.posterUrl} />
                                         <Card.Text className={'boxoffice-rank card-' + i}>{movie.id}</Card.Text>
                                         <Card.Body className="boxoffice-bg">
-                                            <Card.Title className="boxoffice-title">
-                                                <div>{movie.title}</div>
+                                            <Card.Title >
+                                                <div className="boxoffice-title">{movie.title}</div>
                                                 <div className="boxoffice-subtitle">{movie.subTitle}</div>
                                             </Card.Title>
                                             
