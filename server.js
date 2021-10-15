@@ -57,21 +57,6 @@ const getHtml = async (url, params) => {
 
 app.get('/public/top10', function(req, res) {
 
-    // 영화 진흥원 API 호출코드
-    // axios.get('https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json', {
-    //     params : {
-    //         key : '36fcb6727085802f6401dc96e6743cf4',
-    //         targetDt : 20211002,
-    //     },
-    //     // headers : headers,
-    // }).then(resonse => {
-    //     var json = resonse.data.boxOfficeResult.dailyBoxOfficeList
-    //     // console.log(resonse.data.boxOfficeResult.dailyBoxOfficeList);
-    //     res.render('index.ejs', {results : json})
-    // }).catch( error => {
-    //     console.log(error);
-    // })
-
     const url = 'https://movie.naver.com/movie/running/current.nhn';
     var urls;
 
@@ -150,7 +135,11 @@ app.get('/public/top10', function(req, res) {
                         })
                     })
                 }
-                }).then(result => console.log('done'));
+                }).then(() => {
+
+
+                    console.log('done')
+                });
 
                 
     db.collection('top10').find().sort({'id': 1}).toArray(function(err, movies) {
@@ -161,9 +150,6 @@ app.get('/public/top10', function(req, res) {
             res.json({result : movies}) 
         }
     })
-
-    // res.sendFile( path.join( __dirname, "/react-project/build/index.html"));
-    // res.render('index.ejs');
 })
 
 app.get('/public/searchList', function(req, res) {
@@ -174,11 +160,19 @@ app.get('/public/searchList', function(req, res) {
         headers : headers,
     }).then(resonse => {
         var json = resonse.data.items;
-        return json;
-    }).then(result => {
-        console.log('done');
-        res.send(result);
-    });
+        res.send(json);
+    })
+})
+
+app.get('/public/poster', function(req, res) {
+    getHtml('https://movie.naver.com/movie/bi/mi/photoViewPopup.naver?movieCode=' + req.query.code)
+    .then(html => {
+        var $ = cheerio.load(html.data);
+        var $poster = $('div#page_content a').children('img');
+        
+        
+        res.send($poster.attr('src'));
+    })
 })
 
 app.get('/public/quote', function(req, res) {
@@ -186,6 +180,21 @@ app.get('/public/quote', function(req, res) {
     db.collection('quote').findOne({'num': parseInt(req.query.q)})
     .then(result => {
         res.send(result);
+    })
+})
+
+app.get('/public/history', function(req, res) {
+    // 영화 진흥원 API 호출코드
+    getHtml('https://kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json', {
+        params : {
+            key : '36fcb6727085802f6401dc96e6743cf4',
+            targetDt : req.query.date,
+        },
+    }).then(resonse => {
+        var json = resonse.data.boxOfficeResult.dailyBoxOfficeList
+        res.send(json);
+    }).catch( error => {
+        console.log(error);
     })
 })
 

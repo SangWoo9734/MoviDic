@@ -6,7 +6,7 @@ import $ from 'jquery';
 import no from './img/noimage.png';
 
 
-import './App.css';
+import './Search.css';
 import "react-datepicker/dist/react-datepicker.css";
 
 function Search() {
@@ -204,7 +204,7 @@ function SearchResult(props) {
     var [page, setPage] = useState(1);
     var [pageComp, setPageComp] = useState([]);
     var [modalData, setModalData] = useState({});
-
+    
     useEffect(() => {
         let items = [];
         for (let number = 1; number <= Math.ceil(searchResult.length/20); number++) {
@@ -219,6 +219,7 @@ function SearchResult(props) {
         }
         setPageComp(items);
     }, [page])
+    
     
 
     return (
@@ -257,6 +258,20 @@ function SearchResult(props) {
 }
 
 function Moviedetail(props) {
+    
+    var [posterUrl, setPosterUrl] = useState('');
+
+    useEffect(() => {
+        axios.get('/public/poster',{
+            params : {
+                code : props.modalData.link.split("=")[1],
+            }
+        })
+        .then(res => {
+            setPosterUrl(res.data);
+        })
+    }, [props.modalData])
+
     return (
         <Modal
             show = {props.modalState}
@@ -266,19 +281,31 @@ function Moviedetail(props) {
             centered
             className = "modal-box"
             >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter" className="modal-title">{props.modalData.title.split(/<b>|<\/b>/g).join("")}</Modal.Title>
-                <Modal.Title id="contained-modal-title-vcenter" className="modal-sub">{props.modalData.subtitle.split(/<b>|<\/b>/g).join("")}</Modal.Title>
-            </Modal.Header>
+            <Modal.Header closeButton />
             <Modal.Body>
-                <Row>
-                    <Col xs={4} className="border-right">
-                        <img className="modal-img" src={ props.modalData.image === "" ? no : props.modalData.image }/>
+                <Row className='modal-info'>
+                    <Col xs={3} className="modal-img">
+                        <img className="" src={ posterUrl === "" ? null : posterUrl }/>
                     </Col>
-                    <Col xs={8}>
-                    안녕못해요
+                    <Col xs={9} className="modal-detail">
+                        <div className="modal-titleBox mb-3">
+                            <div id="contained-modal-title-vcenter" className="modal-title">{props.modalData.title.split(/<b>|<\/b>/g).join("")}</div>
+                            <div id="contained-modal-title-vcenter" className="modal-sub">{props.modalData.subtitle.split(/<b>|<\/b>/g).join("")} / {props.modalData.pubDate}</div>
+                        </div>
+                        <div className='mt-2 mb-2'><span>런타임 : </span></div>
+                        <div className='mt-2 mb-2'><span>국가 / 장르 : </span></div>
+                        <div className='mt-2 mb-2'><span>감독 : </span>{props.modalData.director.split("|").slice(0, -1).join(', ')}</div>
+                        <div className='mt-2 mb-2'><span>배우 : </span>{props.modalData.actor.split("|").slice(0, -1).join(', ')}</div>
+                        <div className='mt-2 mb-2'><span>평점 : </span>⭐ {props.modalData.userRating}</div>
+                        <div className='mt-2 mb-2'><span>관객 수 : </span></div>
+                        <div className='mt-2 mb-2'><span>사이트 : </span><a target="_blank" href={props.modalData.link }>바로가기</a></div>
+                    </Col>
+                    <hr className="mt-3 mb-3"/>
+                    <Col xs={12} className="modal-analy">
+                        <p>여기에 뭐 넣지</p>
                     </Col>
                 </Row>
+                
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={props.onHide}>Close</Button>
@@ -305,7 +332,6 @@ function Movie(props) {
                 
                 <Card.Text className="searchResult_info mt-4">{props.source.director.split("|").length > 2 ? props.source.director.split("|")[0] + ' 외 ' + (props.source.director.split("|").length - 2) + '명' : props.source.director.split("|").slice(0, -1).join()} / {props.source.pubDate}</Card.Text>
                 <Card.Text className="searchResult_info">평점⭐ {props.source.userRating}</Card.Text>
-                {/* <Card.Text>{props.source.actor.split("|").slice(0, -1).join()}</Card.Text> */}
             </Card.Body>
                 
             <div className='cover'></div>

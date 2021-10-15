@@ -40,7 +40,7 @@ function Boxoffice() {
         <div className="container mt-4 main-box">
             <h4 className="text-center">TODAY BOXOFFICE</h4>
             <div className="boxoffice mt-4" style={{transform : 'translateX(' + {slide} +'%))'}}>
-                <div className={ slide === 0 ? "boxoffice-view translate50" : "boxoffice-view translate50"} >
+                <div className={ slide === 1 ? "boxoffice-view translate-50" : "boxoffice-view translate50"} >
                     <div className='boxoffice-cardset'>
                         {
                             top10.slice(0, 5).map((movie, i) => {
@@ -134,10 +134,10 @@ function Boxoffice() {
             </div>
             <div className='boxoffice-btn'>
                     <button className="btn before" onClick={() => {
-                        slide_change(1);
+                        slide_change(0);
                     }}><img src={before}/></button>
                     <button className="btn next"onClick={() => {
-                        slide_change(0);
+                        slide_change(1);
                     }}><img src={next}/></button>
             </div>
         </div>
