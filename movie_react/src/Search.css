@@ -11,6 +11,8 @@
     float :left;
     margin : 0 5px;
     padding-top : 3px;
+    font-size : 17px;
+    padding-top : 3px;
   }
   
   .datepicker-style + div {
@@ -59,10 +61,6 @@
   .search-year .datepicker-content{
     display: block;
     float : left
-  }
-  .datepicker-style{
-    font-size : 17px;
-    padding-top : 3px;
   }
   
   .searchResult-list {

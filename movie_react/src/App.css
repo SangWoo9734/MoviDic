@@ -2,6 +2,16 @@ html {
   background-color: #212529;
   font-family : nanumsquare;
 }
+textarea:focus {
+  outline: none;
+}
+button:focus {
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+input:focus {
+  outline: none;
+}
 
 .App {
   /* text-align: center; */
@@ -124,14 +134,17 @@ html {
 }
 .boxoffice-rank {
   font-family: BMDOHYEON;
-  position : absolute;
-  width : 75px;
-  height : 40px;
-  color : rgb(101, 31, 231);
-  font-weight : 600;
-  font-size : 60px;
-  top : -25px;
-  left : -10px;
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  color: rgb(255, 255, 255);
+  background: rgba(117,117,117,0.58139005602240894);
+  font-weight: 600;
+  font-size: 22px;
+  top: 30px;
+  left: 15px;
+  text-align: center;
+  border-radius: 10px;
   
 }
 

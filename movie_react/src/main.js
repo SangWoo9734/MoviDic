@@ -130,7 +130,6 @@ function Boxoffice() {
                         }
                     </div>
                 </div>
-
             </div>
             <div className='boxoffice-btn'>
                     <button className="btn before" onClick={() => {
