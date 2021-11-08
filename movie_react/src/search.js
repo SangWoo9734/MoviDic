@@ -125,7 +125,6 @@ function Search() {
                                         {
                                             Object.keys(genre).map(function(g, i ){
                                                 return <Form.Check type={'radio'} inline label={g} name="group1" value={g} id={'inline-radio-' + i} className="genreName" key={i} onClick={(e) => {
-                                                    // console.log(genre[e.target.value]);
                                                     setSelectGenre(genre[e.target.value]);
                                                 }} />
                                             })
@@ -276,10 +275,9 @@ function Moviedetail(props) {
         <Modal
             show = {props.modalState}
             onHide = {props.onHide}
-            size='lg'
             aria-labelledby="contained-modal-title-vcenter"
             centered
-            className = "modal-box"
+            className = "search-modal"
             >
             <Modal.Header closeButton />
             <Modal.Body>

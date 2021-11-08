@@ -205,26 +205,19 @@ app.get('/public/moviedetail', function(req, res) {
             movieCd : req.query.code,
         },
     }).then(response => {
-        
         var data = response.data.movieInfoResult.movieInfo;
-        // console.log((data.nations[0]).nationNm)//제작국가명
-        // console.log((data.genres[0]).genreNm)// 장르명
-        // console.log((data.directors[0]).peopleNm)// 감독
-        // console.log((data.audits[0]).watchGradeNm)
-        // console.log(data.movieNm)
-        // console.log(data.movieCd)
-        // console.log() // 관람등급
+
         var json = {
-            movieCd: data.movieCd, // 영화코드
-            movieNm: data.movieNm, // 영화명 (국문)
-            movieNmEn: data.movieNmEn, // 영화명 (영문)
-            showTm: data.showTm, // 상영시간
-            prdtYear: data.prdtYear, // 개봉연도
-            openDt: data.openDt, // 개봉날짜
-            nations : (data.nations[0]).nationNm, //제작국가명
-            genres : (data.genres[0]).genreNm, // 장르명
-            directors : (data.directors[0]).peopleNm, // 감독
-            watchGradeNm : (data.audits[0]).watchGradeNm // 관람등급
+            movieCd: data.movieCd != false ? data.movieCd : null, // 영화코드
+            movieNm: data.movieNm != false ? data.movieNm : null, // 영화명 (국문)
+            movieNmEn: data.movieNmEn != false ? data.movieNmEn : null, // 영화명 (영문)
+            showTm: data.showTm != false ? data.showTm : null, // 상영시간
+            prdtYear: data.prdtYear != false ? data.prdtYear : null, // 개봉연도
+            openDt: data.openDt != false ? data.openDt : null, // 개봉날짜
+            nations : (data.nations[0]).nationNm != false ? (data.nations[0]).nationNm : null, //제작국가명
+            genres : data.genres != false ? data.genres : null, // 장르명
+            directors : data.directors != false ? data.directors : null, // 감독
+            watchGradeNm : data.audits != false ? (data.audits[0]).watchGradeNm : null // 관람등급
         }
         res.send(json);
     }).catch( error => {

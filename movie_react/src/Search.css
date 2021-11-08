@@ -38,7 +38,7 @@
   }
   
   .react-datepicker-popper[data-placement^=bottom] .react-datepicker__triangle::after {
-    left : -220px !important;
+    left : -8px !important;
   }
   
   .react-datepicker__year-wrapper *{
@@ -130,11 +130,6 @@
     margin-bottom : 5px;
     color :rgb(148, 148, 148)
   }
-  
-  
-  .modal-body {
-    height : 300px;
-  }
 
   .modal-info {
       height : 300px;
@@ -150,12 +145,12 @@
     width : 200px;
   }
   
-  .modal-box>div {
+  .search-modal>div {
     max-height : 400px;
     max-width : 1000px !important;
   }
   
-  .modal-content {
+  .search-modal .modal-content {
     height : 800px;
   }
   
@@ -181,7 +176,7 @@
     text-align: center;
     background :rgb(6, 21, 36);
     position :absolute;
-    bottom : -140px;
+    bottom : -120px;
     display : flex;
     justify-content: center;
     align-items: center;

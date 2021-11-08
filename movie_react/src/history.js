@@ -1,9 +1,9 @@
-import { Button, Card, ListGroup, Row, Col, } from 'react-bootstrap';
+import { Button, Card, ListGroup, Row, Col, Accordion, Table} from 'react-bootstrap';
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import DatePicker from "react-datepicker";
-import ReactDOM from 'react-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import ReactDOM from 'react-dom';
+import { LinearProgress } from '../node_modules/@mui/material';
 
 import './History.css';
 import poster from './img/back.jpg'
@@ -14,6 +14,7 @@ function App() {
     var [quote, setQuote] = useState({});
     var [movieChart, setMovieChart] = useState([]);
     var [startDate, setStartDate] = useState(new Date());
+    var [loading, setLoading] = useState(false);
 
     useEffect(() => {
         var quoteNum = Math.floor(Math.random() * 50) + 1;
@@ -30,6 +31,8 @@ function App() {
 
     useEffect(() => {
 
+        setLoading(true);
+
         var today = startDate;
         var year = today.getFullYear();
         var month = (today.getMonth() + 1) >= 10 ? (today.getMonth() + 1) : '0' + (today.getMonth() + 1);
@@ -41,7 +44,11 @@ function App() {
             }
         })
         .then(res => {
-            setMovieChart(res.data);
+            let timer = setTimeout(()=>{ 
+                setLoading(false);
+                setMovieChart(res.data);
+            }, 500);
+            
         })
     }, [startDate])
 
@@ -58,23 +65,40 @@ function App() {
             <div className='history-box'>
                 <div className="history-date">
                     <Button variant="primary" onClick={() => {
-                        setStartDate(startDate.date);
+                        setMovieChart([]);
+                        var newDate = new Date(startDate);
+                        newDate.setDate(newDate.getDate() - 1);
+                        setStartDate(newDate);
                     }}>&lt;</Button>
                     <DatePicker 
                         selected={startDate}
                         onChange={(date) => {
                             setStartDate(date);
                         }}
-                        showYearPicker
                         dateFormat="yyyy/MM/dd (EE)"
                         className='datepicker'
                         style = {{width : '100%'}}/>
                     <Button variant="primary" onClick={() => {
-                        setStartDate(parseInt(startDate) + 1);
+                        setMovieChart([]);
+                        if (startDate.getDate() >= new Date().getDate())
+                            alert('오늘입니다!');
+                        else {
+                            var newDate = new Date(startDate);
+                            newDate.setDate(newDate.getDate() + 1);
+                        }
+                        setStartDate(newDate);
                     }}>&gt;</Button>
                 </div>
+                {
+                    loading
+                    ?  <LinearProgress />
+                    : null
+                }
                 <Moviehistory2 movies={movieChart}/>
+                
             </div>
+
+            
         </div>
     )
 }
@@ -86,6 +110,7 @@ function Calendar() {
 function Moviehistory2(props) {
     return (
         <div className='container'>
+            <Row>
             {
                 props.movies.map((movie, i) => {
                     return (
@@ -94,6 +119,7 @@ function Moviehistory2(props) {
                     
                 })
             }
+            </Row>
             <div style={{clear : 'both'}}></div>
         </div>
     )
@@ -114,6 +140,15 @@ function Moviecard(props) {
         })
     }, [])
 
+    function directors(dir) {
+        if (dir == null)
+            return ''; 
+        else if (dir.length > 1)
+            return dir[0].peopleNm + ' 외 ' + (dir.length - 1) + ' 명';
+        else 
+            return dir[0].peopleNm;
+    }
+
     function rankChange(rank) {
         if(rank > 0) {
             return ['▲ ' + rank, 'text-danger history-updown']
@@ -127,35 +162,50 @@ function Moviecard(props) {
     }
     
     return (
-        <Col xs={2} className='poster'>
-            <Card className='history-card text-center'>
-                <div className="history-rank">
-                    <div className="h4">{props.movie.rank}</div>
-                    <div className={rankChange(props.movie.rankInten)[1]}>{rankChange(props.movie.rankInten)[0]}</div>
-                </div>
-                
-                {
-                    props.movie.rankOldAndNew === 'NEW'
-                    ? <div className='text-danger history-new' style={{fontWeight : 'bolder', fontSize : '15px'}}>{props.movie.rankOldAndNew}</div>
-                    : null
-                }
-                
-                <Card.Body  className='history-content'>
-                    
-                    
-                    <Card.Title className='h2 history-title'>{props.movie.movieNm}</Card.Title>
-                    <Card.Text>
-                        <div>{props.movie.openDt} 개봉</div>
-                        <div>금일 관객수 | {props.movie.audiCnt} 명</div>
-                        <div>총 관객 수 | {props.movie.audiAcc} 명</div>
+        <Col xs={6} className='poster'>
+            
+            <Accordion>
+                <Accordion.Item eventKey="0">
+                    <Accordion.Header >
+                        <div className="history-rank text-center">
+                            <div className="h4">{props.movie.rank}</div>
+                            <div className={rankChange(props.movie.rankInten)[1]}>{rankChange(props.movie.rankInten)[0]}</div>
+                        </div>
+                        <div className='history-title'>{props.movie.movieNm}</div>
+                        {
+                            props.movie.rankOldAndNew === 'NEW'
+                            ? <div className='text-danger history-new' style={{fontWeight : 'bolder', fontSize : '15px'}}>{props.movie.rankOldAndNew}</div>
+                            : null
+                        }
                         
-                        <div>감독 | {movieDetail.directors}</div>
                         
-                        <div>런타임 | {movieDetail.showTm}분</div>
-                    </Card.Text>
-                </Card.Body>
-                <Card.Img variant="top" src={poster} className='history-poster' />
-            </Card>
+                    </Accordion.Header>
+                    <Accordion.Body className='history-detail'>
+                        <Table responsive="sm">
+                            <tr>
+                                <th>개봉일</th>
+                                <th>{props.movie.openDt}</th>
+                            </tr>
+                            <tr>
+                                <th>총 관객수</th>
+                                <th>{parseInt(props.movie.audiAcc).toLocaleString('en-US')} 명</th>
+                            </tr>
+                            <tr>
+                                <th>감독</th>
+                                <th>{directors(movieDetail.directors)}</th>
+                            </tr>
+                            <tr>
+                                <th>런타임</th>
+                                <th>{movieDetail.showTm} 분</th>
+                            </tr>
+                            <tr>
+                                <th>#</th>
+                                <th>Table heading</th>
+                            </tr>
+                        </ Table>
+                    </Accordion.Body>
+                </Accordion.Item>
+            </Accordion>
         </Col>
     )
 }
@@ -191,17 +241,16 @@ function Moviehistory(props) {
                                             ? <div className='text-danger' style={{fontWeight : 'bolder', fontSize : '15px'}}>{movie.rankOldAndNew}</div>
                                             : null
                                         }
-                                        
                                     </Col>
                                     <Col xs={11} className='history-content'>
-                                        <div className='poster-box'>
-                                            <img src={poster} />
-                                        </div>
                                         <div>
                                             <div className='h4'>{movie.movieNm}</div>
                                             <div>{movie.openDt} 개봉</div>
-                                            <div>금일 관객수 | {movie.audiCnt} 명</div>
-                                            <div>총 관객 수 | {movie.audiAcc} 명</div>
+                                            <div>일 관객수 | {movie.audiCnt} 명</div>
+                                            <div>총 관객수 | {movie.audiAcc} 명</div>
+                                        </div>
+                                        <div>
+                                            {movie.watchGradeNm}
                                         </div>
                                     </Col>
                                 </Row>
