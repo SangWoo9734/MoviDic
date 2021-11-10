@@ -6,7 +6,6 @@ import ReactDOM from 'react-dom';
 import { LinearProgress } from '../node_modules/@mui/material';
 
 import './History.css';
-import poster from './img/back.jpg'
 import "react-datepicker/dist/react-datepicker.css";
 
 function App() {

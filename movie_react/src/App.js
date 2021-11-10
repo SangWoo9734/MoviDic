@@ -35,9 +35,12 @@ function App() {
 							<Nav className="me-auto">
 								<Nav.Link href="/search">SEARCH</Nav.Link>
 								<Nav.Link href="/history">HISTORY</Nav.Link>
-								<Nav.Link href="#pricing" onClick={() => {
-
-								}}>MY</Nav.Link>
+								{
+									loginState
+									? <Nav.Link href="/my">MY</Nav.Link>
+									: null
+								}
+								
 							</Nav>
 							<Nav>
 								{
@@ -79,6 +82,8 @@ function Login(props) {
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [firstName, setFirstName] = useState('');
+	const [lastName, setLastName] = useState('');
 	const [newAcc, setNewAcc] = useState(true);
 
 	const onChange = (e) => {
@@ -87,6 +92,10 @@ function Login(props) {
 			setEmail(value)
 		} else if (name === 'password') {
 			setPassword(value);
+		} else if (name === 'firstName') {
+			setFirstName(value);
+		} else if (name === 'lastName') {
+			setLastName(value);
 		}
 	}
 
@@ -119,7 +128,6 @@ function Login(props) {
 		  provider = new firebaseInstance.auth.GoogleAuthProvider();
 		}
 		const data = await authService.signInWithPopup(provider);
-		console.log(data);
 		console.log(data.additionalUserInfo.profile);
 		props.onHide(false);
 		props.setLoginState(true)
@@ -141,14 +149,21 @@ function Login(props) {
 			</Modal.Header>
 			<Modal.Body>
 				<form onSubmit={onSubmit}>
+					{
+						!newAcc
+						? <span><input className='login-input' name="firstName" type="text" placeholder="First Name" required value={firstName} onChange={onChange}/>
+						<input className='login-input' name="lastName" type="text" placeholder="Last Name" required value={lastName} onChange={onChange}/></span>
+						: 	null
+					}
 					<input className='login-input' name="email" type="email" placeholder="Email" required value={email} onChange={onChange}/>
-					<input className='login-input' name="password" type="password" placeholder="password" required value={password} onChange={onChange}/>
+					<input className='login-input' name="password" type="password" placeholder="Password" required value={password} onChange={onChange}/>
+					
 					<input  className={ newAcc ? 'btn btn-primary' : 'btn btn-success' } type="submit" value={ newAcc ? "Login" : "Create Account" } />
 				</form>
 			</Modal.Body>
 			<Modal.Footer>
-				<button name="google" className='btn btn-secondary' onClick={onGoogleClick}><img src={google} style={{width: '20px', height : '20px', marginBottom : '5px', marginRight : '10px'}} />구글 계정으로 로그인</button>
-				<button className={ newAcc ? 'btn btn-success' : 'btn btn-primary' } onClick={toggleAccount}>{newAcc ? "Create Account" : "Login"}</button>
+				<button name="google" className='btn btn-secondary' onClick={onGoogleClick}><img src={google} style={{width: '20px', height : '20px', marginBottom : '5px', marginRight : '10px'}} />Login with Google</button>
+				<button className={ newAcc ? 'btn btn-success' : 'btn btn-primary' } onClick={toggleAccount}>{newAcc ? "Create New Account" : "Login"}</button>
 				<Button onClick={props.onHide}>Close</Button>
 			</Modal.Footer>
 		</Modal>

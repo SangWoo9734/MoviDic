@@ -1,6 +1,6 @@
 html {
   background-color: #212529;
-  font-family : nanumsquare;
+  font-family : nanumsquare !important;
 }
 textarea:focus {
   outline: none;
@@ -15,7 +15,7 @@ input:focus {
 
 .App {
   /* text-align: center; */
-  font-family : nanumsquare;
+  font-family : nanumsquare !important;
   background: #212529;
   color : white;
   min-height: calc(100vh - 140px);
@@ -59,54 +59,82 @@ input:focus {
 
 .main-box {
   position: relative;
+  max-width: 1200px;
+  margin : auto;
 }
 .boxoffice {
   position : relative;
-  
-  overflow-x: hidden;
+  width : 100%;
+  height : 37vh;
+}
+.boxoffice>div:first-child {
+  width : calc(100% - 160px);
+  margin : auto;
+  overflow : hidden;
 }
 
 .boxoffice-view {
-  width: 200%;
   position : relative;
+  width : 100%;
+  height : 330px;
 }
 .trandlate50 {
-  transform : translateX(50%);
+  transform : translateX(100%);
 }
 .translate-50 {
-  transform : translateX(-50%);
+  transform : translateX(-100%);
 }
 
 .boxoffice-cardset {
   display : block;
   margin : 0;
-  width: 50%;
+  width: 200%;
+  height : 100%;
   float : left;
-  /* margin-left : 120px; */
+  overflow : hidden;
+  position: relative;
+  z-index : 10;
 }
 
 
 .boxoffice-card {
   display : block;
   padding : 25px 10px;
-  width : 20%;
+  width : 10%;
+  height : 100%;
   background: none;
   float : left;
   border : none;
-  
+  position : relative;
 }
+
+.boxoffice-card * {
+  overflow : hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .boxoffice-bg {
-  width : 100%;
-  background : rgb(80, 80, 80, 0.5);
+  width : calc(100% - 20px);
+  height : calc(100% - 50px);
   color : white;
+  background : rgba(80, 80, 80, 0.671);
+  position : absolute;
+  border-radius: 10px;
+  padding-top : 60px;
+  top : 25px;
+  left : 10px;
+  opacity: 0;
 }
+
+.boxoffice-bg:hover{
+  opacity : 1;
+}
+
 .boxoffice-title {
   font-weight : 600;
   width : 100%;
   height : 25px;
-  overflow : hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 .boxoffice-subtitle {
   font-size : 10px;
@@ -114,14 +142,14 @@ input:focus {
 }
 .boxoffice-img {
   width : 100%;
-  height : 320px;
+  height : 100%;
+  border-radius: 10px;
 }
 .boxoffice-agebadge {
   position : absolute;
   width : 35px;
   height : 35px;
   color : white;
-  
   font-weight : 700;
   font-size : 18px;
   padding-top : 6px;
@@ -130,6 +158,7 @@ input:focus {
   border-radius: 50px;
   top : 30px;
   right : 15px;
+  z-index : 15;
 
 }
 .boxoffice-rank {
@@ -145,43 +174,43 @@ input:focus {
   left: 15px;
   text-align: center;
   border-radius: 10px;
-  
+  z-index : 15;
 }
 
 .boxoffice-content {
-  height : 10%;
   padding-top : 3px;
   margin : 0;
-  font-size : 15px;
+  font-size : 13px;
 }
 
 .boxoffice-btn {
   width : 100%;
-  
+  height : 37vh;
+  padding : 25px 0;
+  position: absolute;
+  top : 0;
+  left : 0;
+  display : flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .boxoffice-btn button {
-  position: absolute;
   width : 80px;
-  height : 100%;
-  top : 0;
-  border : 0;
-  border-radius: 0;
-  color : #212529;
+  height : 98%;
+  color : white;
+  font-size : 35px;
+  font-weight : 700;
 }
 
-.boxoffice-btn .before:hover img{
-  border-radius: 50px;
+.boxoffice-btn .before:hover{
   color : white;
-  background: rgb(33,37,41);
-  background: linear-gradient(270deg, rgba(33,37,41,0) 0%, rgba(117,117,117,0.38139005602240894) 50%, rgba(117,117,117,1) 100%);
+  background: rgba(15, 17, 19, 0.514);
 }
 
-.boxoffice-btn .next:hover img{
-  border-radius: 50px;
+.boxoffice-btn .next:hover{
   color : white;
-  background: rgb(117,117,117);
-  background: linear-gradient(270deg, rgba(117,117,117,1) 0%, rgba(117,117,117,0.38139005602240894) 50%, rgba(33,37,41,0) 100%);
+  background: rgba(15, 17, 19, 0.514);
 }
 
 .boxoffice-btn .before{

@@ -1,4 +1,4 @@
-import { Form, Button, Row, Col, Accordion, Card, Modal, Pagination } from 'react-bootstrap';
+import { Form, Button, Row, Col, Accordion, Card, Modal, Pagination, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import React, { useEffect, useState }from 'react';
 import DatePicker from "react-datepicker";
 import axios from 'axios';
@@ -257,7 +257,7 @@ function SearchResult(props) {
 }
 
 function Moviedetail(props) {
-    
+    var [like, setLike] = useState(false)
     var [posterUrl, setPosterUrl] = useState('');
 
     useEffect(() => {
@@ -271,6 +271,12 @@ function Moviedetail(props) {
         })
     }, [props.modalData])
 
+    const renderTooltip = (props) => (
+        <Tooltip id="button-tooltip" {...props}>
+          Like
+        </Tooltip>
+      );
+
     return (
         <Modal
             show = {props.modalState}
@@ -279,7 +285,7 @@ function Moviedetail(props) {
             centered
             className = "search-modal"
             >
-            <Modal.Header closeButton />
+            <Modal.Header closeButton/>
             <Modal.Body>
                 <Row className='modal-info'>
                     <Col xs={3} className="modal-img">
@@ -297,6 +303,18 @@ function Moviedetail(props) {
                         <div className='mt-2 mb-2'><span>평점 : </span>⭐ {props.modalData.userRating}</div>
                         <div className='mt-2 mb-2'><span>관객 수 : </span></div>
                         <div className='mt-2 mb-2'><span>사이트 : </span><a target="_blank" href={props.modalData.link }>바로가기</a></div>
+                        <OverlayTrigger
+                            placement="bottom"
+                            delay={{ show: 50, hide: 50 }}
+                            overlay={renderTooltip}
+                            >
+                            <button className="btn btn-secondary like" onClick = {() => setLike(!like)} style={
+                                like
+                                ? ({'color' : 'red'})
+                                : null
+                            }> ♥ </button>
+                        </OverlayTrigger>
+                        
                     </Col>
                     <hr className="mt-3 mb-3"/>
                     <Col xs={12} className="modal-analy">
@@ -305,9 +323,6 @@ function Moviedetail(props) {
                 </Row>
                 
             </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={props.onHide}>Close</Button>
-            </Modal.Footer>
         </Modal>
     )
 }

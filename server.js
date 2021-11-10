@@ -16,6 +16,7 @@ const headers = {
 
 // DB Setting
 const MongoClient = require('mongodb').MongoClient;
+const { get } = require('request');
 
 var db;
 MongoClient.connect("mongodb+srv://user:zxcv8430@cluster0.gwg1h.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
@@ -53,13 +54,10 @@ const getHtml = async (url, params) => {
 };
 
 // 서버 연결
-
-
 app.get('/public/top10', function(req, res) {
 
     const url = 'https://movie.naver.com/movie/running/current.nhn';
     var urls;
-
     getHtml(url)
         .then(html => {
             
@@ -76,6 +74,7 @@ app.get('/public/top10', function(req, res) {
                     detail_url : detail_url,
                     poster_url : 'https://movie.naver.com/movie/bi/mi/photoViewPopup.naver?movieCode=' + detail_url.split('=')[1]
                 }
+                
                 var rate = {
                     id : i + 1,
                     rate : $(this).find('dd.star dl.info_exp div.b_star span.num').text(),
@@ -110,6 +109,7 @@ app.get('/public/top10', function(req, res) {
                     var data = {
                         title : $poster.children('h3').find('a').first().text(),
                         subTitle : $poster.children('h3').find('strong').text().split(',')[0].trim(),
+                        score : $poster.children('div.main_score').find('span.st_on').first().text().split(' ')[2],
                         info : info,
                     }
                     db.collection('top10').updateOne({'id' : i + 1}, { $set: data}, function(err, result){
@@ -140,6 +140,105 @@ app.get('/public/top10', function(req, res) {
 
                     console.log('done')
                 });
+
+                
+    db.collection('top10').find().sort({'id': 1}).toArray(function(err, movies) {
+        if (err) {
+            res.json({result : 'none'});
+        }
+        else {
+            res.json({result : movies}) 
+        }
+    })
+})
+
+const getObj = (html) => {
+    var urlobj = []
+    var $ = cheerio.load(html.data);
+    var $movieList = $('div.lst_wrap ul.lst_detail_t1').children('li');
+
+
+    $movieList.each(function (i) {
+        if (i > 9) { return urlobj}
+        var detail_url = 'https://movie.naver.com/' + $(this).find('dt.tit a').attr('href');
+        urlobj[i] = {
+            detail_url : detail_url,
+            poster_url : 'https://movie.naver.com/movie/bi/mi/photoViewPopup.naver?movieCode=' + detail_url.split('=')[1]
+        }
+    });
+    return urlobj;
+}
+
+app.get('/public/top10', function(req, res) {
+
+    const url = 'https://movie.naver.com/movie/running/current.nhn';
+    var urls;
+    console.log(getHtml(url)
+        .then(html => {
+            
+            // db.collection('top10').drop();
+            var urlobj = []
+            var $ = cheerio.load(html.data);
+            var $movieList = $('div.lst_wrap ul.lst_detail_t1').children('li');
+
+
+            $movieList.each(function (i) {
+                if (i > 9) { return urlobj}
+                var detail_url = 'https://movie.naver.com/' + $(this).find('dt.tit a').attr('href');
+                urlobj[i] = {
+                    detail_url : detail_url,
+                    poster_url : 'https://movie.naver.com/movie/bi/mi/photoViewPopup.naver?movieCode=' + detail_url.split('=')[1]
+                }
+            });
+            return urlobj;
+        }))
+        .then((result) => {
+            var crawledMovie = [];
+            for (let i = 0; i < result.length; i++){
+                console.log(getHtml(result[i].detail_url)
+                .then(html => {
+                    var $ = cheerio.load(html.data);
+                    var $poster = $('div.article div.wide_info_area div.mv_info');
+
+                    var info = []
+                    $poster.children('p.info_spec').find('span').each( function(j){
+
+                        if (j === 4){/[\n|\t|\r]+/gi
+                            info[j] =  $(this).text().trim().replace(/[\n|\t|\r]+/gi, "").split(/[\[|\]]+/gi)[2];
+                        } else {
+                            info[j] =  $(this).text().trim().replace(/[\n|\t|\r]+/gi, "");
+                        }
+                        
+
+                    })
+
+                    var data = {
+                        title : $poster.children('h3').find('a').first().text(),
+                        subTitle : $poster.children('h3').find('strong').text().split(',')[0].trim(),
+                        info : info,
+                    }
+
+                    crawledMovie[i] = data;
+                    return 0;
+                }).then(() => {
+                    getHtml(result[i].poster_url)
+                        .then(html => {
+                            
+                            var $ = cheerio.load(html.data);
+                            var $poster = $('div#page_content a').children('img');
+                            crawledMovie[i]['posterUrl'] = $poster.attr('src');
+                            return 0;
+                        })
+                    return crawledMovie;
+                })
+                )
+            }
+            
+            return crawledMovie;
+        }).then((result) => {
+                console.log(result);
+                console.log('done');
+            });
 
                 
     db.collection('top10').find().sort({'id': 1}).toArray(function(err, movies) {
