@@ -3,14 +3,14 @@ html {
   font-family : nanumsquare !important;
 }
 textarea:focus {
-  outline: none;
+  outline: none !important;
 }
 button:focus {
   outline: none !important;
   -webkit-tap-highlight-color: transparent;
 }
 input:focus {
-  outline: none;
+  outline: none !important;
 }
 
 .App {
@@ -69,14 +69,16 @@ input:focus {
 }
 .boxoffice>div:first-child {
   width : calc(100% - 160px);
+  height : 100%;
   margin : auto;
   overflow : hidden;
 }
 
 .boxoffice-view {
   position : relative;
-  width : 100%;
-  height : 330px;
+  width : 100%;   
+  height : 100%;
+  z-index : 10;
 }
 .trandlate50 {
   transform : translateX(100%);
@@ -106,12 +108,15 @@ input:focus {
   float : left;
   border : none;
   position : relative;
+  
 }
 
 .boxoffice-card * {
   overflow : hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  
+ 
 }
 
 .boxoffice-bg {
@@ -144,6 +149,8 @@ input:focus {
   width : 100%;
   height : 100%;
   border-radius: 10px;
+  -webkit-box-shadow: 10px 10px 10px -5px #000000;
+  box-shadow: 10px 10px 10px -5px #000000;
 }
 .boxoffice-agebadge {
   position : absolute;
@@ -312,4 +319,42 @@ input:focus {
   margin : 7px 0;
   width : 100%;
   height : 40px;
+}
+
+.boxoffice-search {
+  display : flex;
+  flex-direction: row;
+  height : 50px;
+  justify-content: center;
+  align-items: center;
+  margin : 50px 0;
+}
+.boxoffice-search-input {
+  width : 50%;
+  height: 100%;
+  -webkit-box-shadow: 15px 10px 10px -5px #000000;
+  box-shadow: 15px 10px 10px -5px #000000;
+}
+
+.boxoffice-search-input input {
+  height : 100%;
+  border-radius: 0 10px 10px 0;
+  border-width : 3px 3px 3px 0;
+  border-color : rgb(6, 21, 36) ;
+  border-style: solid ;
+}
+.boxoffice-search-button {
+  width : 5%;
+  height: 100%;
+  border-radius: 10px 0 0 10px;
+  border-width : 3px 0 3px 3px;
+  /* background-color: rgb(6, 21, 36); */
+  background-color: white;
+  border-color : rgb(6, 21, 36) ;
+  border-style: solid ;
+  font-size: 25px;
+  padding-top: 5px;
+  padding-left: 15px;
+  -webkit-box-shadow: 15px 10px 10px -5px #000000;
+  box-shadow: 15px 10px 10px -5px #000000;
 }

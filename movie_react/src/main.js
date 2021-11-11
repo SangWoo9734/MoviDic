@@ -1,8 +1,10 @@
-import { Card, DropdownButton, Dropdown } from 'react-bootstrap';
+import { Card, DropdownButton, Dropdown, Form, Button } from 'react-bootstrap';
 import React, { useHistory, useEffect, useState} from 'react'
 import axios from 'axios';
 import './App.css';
 import theater from './img/theater.png';
+import back_history from './img/back-history.jpg';
+import back_search from './img/back-search.jpg';
 
 
 
@@ -11,6 +13,7 @@ function Boxoffice({history}) {
     var [top10, top10_change] = useState([]);
 	var [page, page_change] = useState(1);
 	var [slide, slide_change] = useState(0);
+    var [searchWord, setSearchWord] = useState('');
 
 	// const getHtml = async() => {
 	// 	try {
@@ -34,8 +37,32 @@ function Boxoffice({history}) {
 			// 오류 발생시 실행
 		}
 	}, [page]);
+
+    const handlerSubmit = (e) => {
+        e.preventDefault();
+        var setting;
+
+        setting = {
+            query : searchWord,
+            genre : 0,
+        }
+
+        localStorage.setItem('setting', JSON.stringify(setting));
+        history.push('/search');
+    }
+
     return (
         <div className=" mt-4 main-box">
+            
+            <Form className='boxoffice-search' onSubmit={handlerSubmit}>
+                <div className= 'boxoffice-search-button text-center'>🔎</div>
+                <Form.Group className="boxoffice-search-input">
+                    <Form.Control type="text" placeholder="영화 검색" onChange={ e => {
+                        setSearchWord(e.target.value);
+                    }}/>
+                </Form.Group>
+            </Form>
+
             <h4 className="text-center h2">
                 <img src={theater} style={{width: '40px', height : '40px', marginBottom : '5px', marginRight : '10px'}}/>
                 TODAY BOXOFFICE
@@ -97,21 +124,21 @@ function Boxoffice({history}) {
                     }}>&gt;</button>
                 </div>
             </div>
-        </div>        
-        // <div>
-            
-        //     <div className="select-box mt-4">
-        //         <div>
-        //             <img src={back_search} className='select-img'/>
-        //             <div className="select-left h1" style={{"textAlign" : "left"}} onClick={() => history.push('/search')}>🔍 SEARCH  &gt;&gt;&gt;</div>
-        //         </div>
-        //         <div>
-        //             <img src={back_history} className='select-img'/>
-        //             <div className="select-right h1" style={{"textAlign" : "right"}} onClick={() => history.push('/history')}>&lt;&lt;&lt;  HISTORY 🎬</div>
-        //         </div>
-        //     </div>
-        // </div>
 
+            <div className="select-box mt-4">
+                
+                <div>
+                    <img src={back_history} className='select-img'/>
+                    <div className="select-right h3" style={{"textAlign" : "left"}} onClick={() => history.push('/history')}>🎬 HISTORY</div>
+                </div>
+                <div>
+                    <img src={back_search} className='select-img'/>
+                    <div className="select-left h3" style={{"textAlign" : "right"}}>Continue... </div>
+                </div>
+            </div>
+        </div>
+    
+        
     )
 }
 

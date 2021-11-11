@@ -1,4 +1,4 @@
-import { Navbar, Container, Nav, Modal, Button} from 'react-bootstrap';
+import { Navbar, Container, Nav, Modal, Button, Form} from 'react-bootstrap';
 import React, { useEffect, useState } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import axios from 'axios';
@@ -33,8 +33,8 @@ function App() {
 						</Navbar.Brand>
 						<Navbar.Collapse id="responsive-navbar-nav">
 							<Nav className="me-auto">
-								<Nav.Link href="/search">SEARCH</Nav.Link>
-								<Nav.Link href="/history">HISTORY</Nav.Link>
+								{/* <Nav.Link href="/search">SEARCH</Nav.Link>
+								<Nav.Link href="/history">HISTORY</Nav.Link> */}
 								{
 									loginState
 									? <Nav.Link href="/my">MY</Nav.Link>
@@ -53,6 +53,7 @@ function App() {
 								}
 								
 							</Nav>
+
 						</Navbar.Collapse>
 						
 				</Container>
@@ -62,18 +63,16 @@ function App() {
 			< Login show = {loginModal} onHide={() => setLoginModal(false)} setLoginState={setLoginState} setUserInfo={setUserInfo}/>
 			
 			<BrowserRouter>
-				<div>
-					<Switch>
-						<Route exact path={"/"} component={Boxoffice} />
-						<Route exact path={"/search"} component={Search} />
-						<Route exact path={"/history"} component={History} />
-					</Switch>
-				</div>
+				<Switch>
+					<Route exact path={"/"} component={Boxoffice} />
+					<Route exact path={"/search"} component={Search} />
+					<Route exact path={"/history"} component={History} />
+				</Switch>
 			</BrowserRouter>
 
-			<div className='footer'>
+			{/* <div className='footer'>
 				<p>CopyRight By Sangwoo</p>
-			</div>
+			</div> */}
 		</div>
 	);
 }

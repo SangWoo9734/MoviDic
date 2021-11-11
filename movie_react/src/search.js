@@ -23,14 +23,13 @@ function Search() {
     var [startDate, setStartDate] = useState(new Date());
     var [endDate, setEndDate] = useState(new Date());
     var [date_search, setDate_search] = useState(true);
-    var [date_selected, setDate_selected] = useState(false);
-    var [genre_selected, setGenre_selected] = useState(false);
     var [selectGenre, setSelectGenre] = useState(0);
     var [searchResult, searchResult_change] = useState([])
     var [showResult, showResult_change] = useState(false);
     var [modalState, setModalState] = useState(false);
     var [items, setItems] = useState([]);
     var [quote, setQuote] = useState({});
+    var [searchInMain, setSearchInMain] = useState(localStorage.getItem('setting') != null ? JSON.parse(localStorage.getItem('setting')) : {});
 
     useEffect(() => {
         var quoteNum = Math.floor(Math.random() * 50) + 1;
@@ -43,13 +42,18 @@ function Search() {
             setQuote(result.data);
         })
 
-    }, []);
-    
+        if(searchInMain){
+            setSearchWord(searchInMain.query);
+            console.log(searchWord, selectGenre);
+            handlerSubmit();
+        }
+    }, [searchWord]);
 
     const handlerSubmit = (e) => {
-        e.preventDefault();
+        // e.preventDefault();
+        
+        // console.log(searchWord, selectGenre);
         var setting;
-        console.log();
         if (!date_search) {
             setting = {
                 query : searchWord,
@@ -89,7 +93,6 @@ function Search() {
         });
     }
 
-
     return (
         <div className='container mt-4'>
             <div className='top-box mt-5 mb-5'>
@@ -107,7 +110,12 @@ function Search() {
                         <Col xs={10}>
                             <Form.Control type="text" placeholder="Search..." onChange={ e => {
                                 setSearchWord(e.target.value);
-                            }}/>
+                            }}
+                            value={
+                                searchWord != ''
+                                ? searchWord
+                                : null
+                            }/>
                         </Col>
                     </Form.Group>
                     
