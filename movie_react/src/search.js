@@ -1,4 +1,4 @@
-import { Form, Button, Row, Col, Accordion, Card, Modal, Pagination, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { Form, Button, Row, Col, Accordion, Card, Modal, Pagination, OverlayTrigger, Tooltip, Dropdown, DropdownButton } from 'react-bootstrap';
 import React, { useEffect, useState }from 'react';
 import DatePicker from "react-datepicker";
 import axios from 'axios';
@@ -233,7 +233,14 @@ function SearchResult(props) {
         <div className='container mt-5'>
             <div>
                 <h2 style={{float:'left', margin:'0'}}><span className='h2 text-primary'>"{props.word}"</span> 에 대한 검색결과</h2>
+                
                 <p style={{float:'right'}}>총 <span className='h3 text-primary'>{searchResult.length}</span> 개</p>
+                <DropdownButton id="dropdown-basic-button" title="Filter" style={{float:'right'}} onChange={() => {console.log(1)}}>
+                    <Dropdown.Item >이름</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">연도</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">평점 높은 순</Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">평점 낮은 순</Dropdown.Item>
+                </DropdownButton>
             </div>
             <div style={{clear : 'both'}}></div>
             <hr style={{marginTop : '0'}}/>

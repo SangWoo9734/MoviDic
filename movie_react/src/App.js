@@ -33,8 +33,8 @@ function App() {
 						</Navbar.Brand>
 						<Navbar.Collapse id="responsive-navbar-nav">
 							<Nav className="me-auto">
-								{/* <Nav.Link href="/search">SEARCH</Nav.Link>
-								<Nav.Link href="/history">HISTORY</Nav.Link> */}
+								<Nav.Link href="/search">SEARCH</Nav.Link>
+								<Nav.Link href="/history">HISTORY</Nav.Link>
 								{
 									loginState
 									? <Nav.Link href="/my">MY</Nav.Link>
