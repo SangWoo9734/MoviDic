@@ -125,7 +125,7 @@ function Boxoffice({history}) {
                 </div>
             </div>
 
-            <div className="select-box mt-4">
+            <div className="select-box mt-5">
                 
                 <div>
                     <img src={back_history} className='select-img'/>

@@ -44,7 +44,7 @@ function Search() {
 
         if(searchInMain){
             setSearchWord(searchInMain.query);
-            console.log(searchWord, selectGenre);
+            localStorage.removeItem('setting');
             handlerSubmit();
         }
     }, [searchWord]);

@@ -14,11 +14,12 @@ import { authService, firebaseInstance } from './fbase';
 function App() {
 
 	var [loginModal, setLoginModal] = useState(false);
-	var [loginState, setLoginState] = useState(false);
-	var [userInfo, setUserInfo] = useState({});
-
+	var [loginState, setLoginState] = useState(localStorage.getItem('isLogin') ? true : false);
+	var [userInfo, setUserInfo] = useState(localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : {});
 	const onLogOutClick = () => {
 		authService.signOut();
+		localStorage.removeItem('isLogin');
+		localStorage.removeItem('userInfo');
 		setLoginState(false);
 		setUserInfo({});
 	}
@@ -43,12 +44,14 @@ function App() {
 								
 							</Nav>
 							<Nav>
+								<p style={{paddingTop : '8px', paddingRight : '15px', margin : '0'}}>{
+									loginState
+									? userInfo.firstName + userInfo.lastName + ' 님 환영합니다.'
+									: '로그인이 필요합니다.'
+								}</p>
 								{
 									loginState
-									? <button className='btn btn-primary' onClick={() => {
-										onLogOutClick();
-										alert('로그아웃 되었습니다.');
-									}}>LOGOUT</button>
+									? <button className='btn btn-primary' onClick={() => {onLogOutClick(); alert('로그아웃 되었습니다.');}}>LOGOUT</button>
 									: <button className='btn btn-primary' onClick={() => {setLoginModal(true)}}>LOGIN</button>
 								}
 								
@@ -102,18 +105,32 @@ function Login(props) {
 		e.preventDefault();
 		try {
 			let data;
+			let userData;
+
 			if (newAcc) {
 				// login
 				data = await authService.signInWithEmailAndPassword(email, password);
+				
 			  } else {
 				// create account
 				data = await authService.createUserWithEmailAndPassword(email, password);
+				userData = {
+					firstName : firstName,
+					lastName : lastName,
+					email : email,
+				}
 			  }
-			console.log(data);
+			console.log(userData);
+			
+			props.setUserInfo(userData);
+			setFirstName('');
+			setLastName('');
 			setEmail('');
 			setPassword('');
-			props.onHide(false);
+			props.onHide(false);	
 			props.setLoginState(true);
+			localStorage.setItem('userInfo', JSON.stringify(userData));
+			localStorage.setItem('isLogin', true);
 		} catch (err) {
 			console.log(err);
 			alert('유효한 사용자가 없습니다.');
@@ -127,9 +144,17 @@ function Login(props) {
 		  provider = new firebaseInstance.auth.GoogleAuthProvider();
 		}
 		const data = await authService.signInWithPopup(provider);
-		console.log(data.additionalUserInfo.profile);
+		let userData = {
+			firstName : data.additionalUserInfo.profile.family_name,
+			lastName : data.additionalUserInfo.profile.given_name,
+			email : data.additionalUserInfo.profile.email,
+		}
+		console.log(userData);
+		props.setUserInfo(userData);
 		props.onHide(false);
-		props.setLoginState(true)
+		props.setLoginState(true);
+		localStorage.setItem('userInfo', JSON.stringify(userData));
+		localStorage.setItem('isLogin', true);
 	}
 
 	

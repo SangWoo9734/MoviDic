@@ -9,7 +9,7 @@ import './History.css';
 import "react-datepicker/dist/react-datepicker.css";
 
 function App() {
-
+    
     var [quote, setQuote] = useState({});
     var [movieChart, setMovieChart] = useState([]);
     var [startDate, setStartDate] = useState(new Date());
