@@ -173,7 +173,7 @@ app.get('/public/top10', function(req, res) {
 
     const url = 'https://movie.naver.com/movie/running/current.nhn';
     var urls;
-    console.log(getHtml(url)
+    getHtml(url)
         .then(html => {
             
             // db.collection('top10').drop();
@@ -191,7 +191,7 @@ app.get('/public/top10', function(req, res) {
                 }
             });
             return urlobj;
-        }))
+        })
         .then((result) => {
             var crawledMovie = [];
             for (let i = 0; i < result.length; i++){
@@ -323,6 +323,48 @@ app.get('/public/moviedetail', function(req, res) {
         console.log(error);
     })
 })
+
+app.get('/public/createUserLike', function(req, res) {
+    var data = {
+        email: req.query.email,
+        liked : [],
+    }
+
+    db.collection('userFavorite').findOne({'email': req.query.email}, function(err, result) {
+        if(err){
+            res.render('error', { errorMsg: err } )
+        }
+        else {
+            if (!result){
+                db.collection('userFavorite').insertOne(data, function(err, reuslt) {
+                    if(err) res.render('error', { errorMsg: err } )
+                    res.send(data);
+                })
+            }
+            else {
+                res.send(result);
+
+            }
+        }
+    })
+})
+
+app.get('/public/isLiked', function(req, res) {
+    db.collection('userFavorite').findOne({'email': req.query.email}) 
+})
+
+app.get('/public/addLike', function(req, res) {
+    db.collection('userFavorite').updateOne({'email': req.query.email}, { $push: {liked : [...result.liked, req.query.movie]}}, function(err, result){
+        if (err) return console.log(err);
+    });
+})
+
+// app.get('/public/undoLike', function(req, res) {
+    
+//     db.collection('top10').insertOne(rate, function (err, result){
+//         if (err) return console.log(err);
+//     });
+// })
 
 app.get('/', function(req, res) {
     // res.header('Access-Control-Allow-Origin', '*');

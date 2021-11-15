@@ -19,7 +19,7 @@ input:focus {
   background: #212529;
   color : white;
   min-height: calc(100vh - 140px);
-  height : fit-content;
+  height : calc(100vh - 60px);
   position: relative;
 }
 .App-logo {
@@ -55,6 +55,10 @@ input:focus {
   to {
     transform: rotate(360deg);
   }
+}
+
+.navbar {
+  height : 60px;
 }
 
 .main-box {
@@ -240,6 +244,7 @@ input:focus {
 .age-all {
   background-color: rgb(255, 217, 0);
   font-size: 16px;
+  padding-left: 4px;
 }
 .age-12 {
   background : rgb(0, 177, 0);
@@ -343,7 +348,6 @@ input:focus {
   border-style: solid ;
 }
 .boxoffice-search-button {
-  width : 5%;
   height: 100%;
   border-radius: 10px 0 0 10px;
   border-width : 3px 0 3px 3px;
@@ -352,8 +356,12 @@ input:focus {
   border-color : rgb(6, 21, 36) ;
   border-style: solid ;
   font-size: 25px;
-  padding-top: 5px;
-  padding-left: 15px;
+  padding : 5px 0 5px 10px;
   -webkit-box-shadow: 15px 10px 10px -5px #000000;
   box-shadow: 15px 10px 10px -5px #000000;
+}
+
+.loginUser{
+  padding : 8px 15px 0 15px;
+  margin : 0;
 }

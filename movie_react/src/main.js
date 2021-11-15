@@ -3,9 +3,9 @@ import React, { useHistory, useEffect, useState} from 'react'
 import axios from 'axios';
 import './App.css';
 import theater from './img/theater.png';
+import search from './img/search.png';
 import back_history from './img/back-history.jpg';
 import back_search from './img/back-search.jpg';
-
 
 
 function Boxoffice({history}) {
@@ -39,15 +39,7 @@ function Boxoffice({history}) {
 	}, [page]);
 
     const handlerSubmit = (e) => {
-        e.preventDefault();
-        var setting;
-
-        setting = {
-            query : searchWord,
-            genre : 0,
-        }
-
-        localStorage.setItem('setting', JSON.stringify(setting));
+        localStorage.setItem('searchWord', searchWord);
         history.push('/search');
     }
 
@@ -55,7 +47,8 @@ function Boxoffice({history}) {
         <div className=" mt-4 main-box">
             
             <Form className='boxoffice-search' onSubmit={handlerSubmit}>
-                <div className= 'boxoffice-search-button text-center'>🔎</div>
+                <img src={search} className = 'boxoffice-search-button'/>
+                {/* <div className= 'boxoffice-search-button text-center'>🔎</div> */}
                 <Form.Group className="boxoffice-search-input">
                     <Form.Control type="text" placeholder="영화 검색" onChange={ e => {
                         setSearchWord(e.target.value);

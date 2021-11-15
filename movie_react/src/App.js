@@ -9,6 +9,7 @@ import google from './img/google.png';
 import Boxoffice from './main.js';
 import Search from './search.js';
 import History from './history.js';
+import MyPage from './myPage.js';
 import { authService, firebaseInstance } from './fbase';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
 	var [loginModal, setLoginModal] = useState(false);
 	var [loginState, setLoginState] = useState(localStorage.getItem('isLogin') ? true : false);
 	var [userInfo, setUserInfo] = useState(localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : {});
+
 	const onLogOutClick = () => {
 		authService.signOut();
 		localStorage.removeItem('isLogin');
@@ -24,9 +26,13 @@ function App() {
 		setUserInfo({});
 	}
 
+	// window.addEventListener('unload', () => {
+	// 	onLogOutClick();
+	// });
+
 	return (
 		<div className="App">
-			<Navbar bg="dark" variant="dark">
+			<Navbar bg="dark" variant="dark" className="navbar">
 				<Container className='text-center'>
 						<Navbar.Brand href="/">
 							<img src={whale} style={{width: '40px', height : '40px', marginRight : '10px'}} />
@@ -36,25 +42,18 @@ function App() {
 							<Nav className="me-auto">
 								<Nav.Link href="/search">SEARCH</Nav.Link>
 								<Nav.Link href="/history">HISTORY</Nav.Link>
-								{
-									loginState
-									? <Nav.Link href="/my">MY</Nav.Link>
-									: null
-								}
-								
 							</Nav>
 							<Nav>
-								<p style={{paddingTop : '8px', paddingRight : '15px', margin : '0'}}>{
-									loginState
-									? userInfo.firstName + userInfo.lastName + ' 님 환영합니다.'
-									: '로그인이 필요합니다.'
-								}</p>
 								{
 									loginState
-									? <button className='btn btn-primary' onClick={() => {onLogOutClick(); alert('로그아웃 되었습니다.');}}>LOGOUT</button>
+									? <>
+										<Nav.Link href="/my">MY</Nav.Link>
+										<p className='loginUser'>{userInfo.firstName + userInfo.lastName + ' 님 환영합니다.'}</p>
+										<button className='btn btn-primary' onClick={() => {onLogOutClick(); alert('로그아웃 되었습니다.');}}>LOGOUT</button>
+									</>
 									: <button className='btn btn-primary' onClick={() => {setLoginModal(true)}}>LOGIN</button>
 								}
-								
+
 							</Nav>
 
 						</Navbar.Collapse>
@@ -63,13 +62,14 @@ function App() {
 			</Navbar>
 
 			
-			< Login show = {loginModal} onHide={() => setLoginModal(false)} setLoginState={setLoginState} setUserInfo={setUserInfo}/>
+			< Login show = {loginModal} onHide={() => setLoginModal(false)} setLoginState={setLoginState} userInfo = {userInfo} setUserInfo={setUserInfo}/>
 			
 			<BrowserRouter>
 				<Switch>
 					<Route exact path={"/"} component={Boxoffice} />
 					<Route exact path={"/search"} component={Search} />
 					<Route exact path={"/history"} component={History} />
+					<Route exact path={"/my"} component={MyPage} />
 				</Switch>
 			</BrowserRouter>
 
@@ -82,11 +82,11 @@ function App() {
 
 function Login(props) {
 
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
-	const [firstName, setFirstName] = useState('');
-	const [lastName, setLastName] = useState('');
-	const [newAcc, setNewAcc] = useState(true);
+	var [email, setEmail] = useState('');
+	var [password, setPassword] = useState('');
+	var [firstName, setFirstName] = useState('');
+	var [lastName, setLastName] = useState('');
+	var [newAcc, setNewAcc] = useState(true);
 
 	const onChange = (e) => {
 		const {target : {name, value}} = e;
@@ -120,9 +120,10 @@ function Login(props) {
 					email : email,
 				}
 			  }
-			console.log(userData);
+			  
+
 			
-			props.setUserInfo(userData);
+			// props.setUserInfo(userData);
 			setFirstName('');
 			setLastName('');
 			setEmail('');
@@ -140,25 +141,26 @@ function Login(props) {
 	const onGoogleClick = async (event) => {
 		const {target: {name}} = event;
 		let provider;
+		
 		if (name === 'google') {
 		  provider = new firebaseInstance.auth.GoogleAuthProvider();
 		}
 		const data = await authService.signInWithPopup(provider);
-		let userData = {
+		const userData = {
 			firstName : data.additionalUserInfo.profile.family_name,
 			lastName : data.additionalUserInfo.profile.given_name,
 			email : data.additionalUserInfo.profile.email,
 		}
-		console.log(userData);
+
 		props.setUserInfo(userData);
 		props.onHide(false);
 		props.setLoginState(true);
 		localStorage.setItem('userInfo', JSON.stringify(userData));
 		localStorage.setItem('isLogin', true);
 	}
-
 	
 	const toggleAccount = () => setNewAcc((prev) => !prev);
+	
 	return (
 		<Modal
 		show = {props.show}

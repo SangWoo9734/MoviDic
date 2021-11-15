@@ -29,8 +29,8 @@ function Search() {
     var [modalState, setModalState] = useState(false);
     var [items, setItems] = useState([]);
     var [quote, setQuote] = useState({});
-    var [searchInMain, setSearchInMain] = useState(localStorage.getItem('setting') != null ? JSON.parse(localStorage.getItem('setting')) : {});
-
+    var [searchInMain, setSearchInMain] = useState(localStorage.getItem('searchWord') != null ? localStorage.getItem('searchWord') : '');
+    
     useEffect(() => {
         var quoteNum = Math.floor(Math.random() * 50) + 1;
 
@@ -43,16 +43,16 @@ function Search() {
         })
 
         if(searchInMain){
-            setSearchWord(searchInMain.query);
-            localStorage.removeItem('setting');
+            localStorage.removeItem('searchWord');
             handlerSubmit();
         }
-    }, [searchWord]);
+    }, []);
 
     const handlerSubmit = (e) => {
-        // e.preventDefault();
+        if (searchInMain == "") {
+            e.preventDefault();
+        }
         
-        // console.log(searchWord, selectGenre);
         var setting;
         if (!date_search) {
             setting = {
@@ -64,13 +64,21 @@ function Search() {
             }
         }
         else {
-            setting = {
-                query : searchWord,
-                genre : selectGenre,
-                display : 100,
+            if(searchInMain){
+                setting = {
+                    query : searchInMain,
+                    genre : selectGenre,
+                    display : 100,
+                }
             }
+            else {
+                setting = {
+                    query : searchWord,
+                    genre : selectGenre,
+                    display : 100,
+                }
+            }           
         }
-        
         axios.get('/public/searchList', {
             params : setting,
         })
@@ -110,12 +118,12 @@ function Search() {
                         <Col xs={10}>
                             <Form.Control type="text" placeholder="Search..." onChange={ e => {
                                 setSearchWord(e.target.value);
-                            }}
-                            value={
-                                searchWord != ''
-                                ? searchWord
-                                : null
-                            }/>
+                            }} value = {
+                                searchInMain
+                                ? searchInMain
+                                : searchWord
+                            }
+                            />
                         </Col>
                     </Form.Group>
                     
@@ -274,6 +282,7 @@ function SearchResult(props) {
 function Moviedetail(props) {
     var [like, setLike] = useState(false)
     var [posterUrl, setPosterUrl] = useState('');
+    var [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem('userInfo')));
 
     useEffect(() => {
         axios.get('/public/poster',{
@@ -285,6 +294,27 @@ function Moviedetail(props) {
             setPosterUrl(res.data);
         })
     }, [props.modalData])
+
+    useEffect(() => {
+        axios.get('/public/isLiked', {
+			params : {
+				email : userInfo.email,
+			}
+		}).then( result => {
+            console.log(result);
+		})
+    })
+
+    const addLike = e => {
+        axios.get('/public/addLike', {
+			params : {
+				email : userInfo.email,
+                movie : props.modalData,
+			}
+		}).then( result => {
+			console.log(result.data.liked);
+		})
+    }
 
     const renderTooltip = (props) => (
         <Tooltip id="button-tooltip" {...props}>

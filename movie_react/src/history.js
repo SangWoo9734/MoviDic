@@ -102,10 +102,6 @@ function App() {
     )
 }
 
-function Calendar() {
-
-}
-
 function Moviehistory2(props) {
     return (
         <div className='container'>
@@ -225,7 +221,7 @@ function Moviehistory(props) {
     }
 
     return (
-        <div className='container '>
+        <div className='container'>
             <ListGroup as="ol">
                 {
                     props.movies.map((movie, i) => {
