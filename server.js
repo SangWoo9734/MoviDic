@@ -343,18 +343,21 @@ app.get('/public/createUserLike', function(req, res) {
             }
             else {
                 res.send(result);
-
             }
         }
     })
 })
 
 app.get('/public/isLiked', function(req, res) {
-    db.collection('userFavorite').findOne({'email': req.query.email}) 
+    db.collection('userFavorite').findOne({'email': req.query.email}, function(err, result){
+        if (err) res.render('error', { errorMsg: err } )
+        res.send(result);
+    })
 })
 
 app.get('/public/addLike', function(req, res) {
-    db.collection('userFavorite').updateOne({'email': req.query.email}, { $push: {liked : [...result.liked, req.query.movie]}}, function(err, result){
+    console.log(req);
+    db.collection('userFavorite').updateOne({'email': req.query.email}, { $set: {liked : req.query.likedList}}, function(err, result){
         if (err) return console.log(err);
     });
 })

@@ -12,24 +12,24 @@ import "react-datepicker/dist/react-datepicker.css";
 function Search() {
     
     
-    var [genre, genre_change] = useState({
+    const [genre, genre_change] = useState({
         '드라마' : 1, '판타지' : 2, '서부': 3, '공포' : 4, '로맨스': 5, '모험':  6, '스릴러': 7, '느와르' : 8,
         '컬트' : 9, '다큐멘터리' : 10, '코미디' : 11, '가족' : 12, '미스터리' : 13, '전쟁' : 14, '애니메이션' : 15,
         '범죄' : 16, '뮤지컬' : 17, 'SF' : 18, '액션' : 19, '무협' : 20, '에로' : 21, '서스펜스' : 22, '서사' : 23, '블랙코미디' : 24,
         '실험' : 25, '영화카툰' : 26, '영화음악' : 27, '영화패러디포스터' : 28
     })
     
-    var [searchWord, setSearchWord] = useState('');
-    var [startDate, setStartDate] = useState(new Date());
-    var [endDate, setEndDate] = useState(new Date());
-    var [date_search, setDate_search] = useState(true);
-    var [selectGenre, setSelectGenre] = useState(0);
-    var [searchResult, searchResult_change] = useState([])
-    var [showResult, showResult_change] = useState(false);
-    var [modalState, setModalState] = useState(false);
-    var [items, setItems] = useState([]);
-    var [quote, setQuote] = useState({});
-    var [searchInMain, setSearchInMain] = useState(localStorage.getItem('searchWord') != null ? localStorage.getItem('searchWord') : '');
+    const [searchWord, setSearchWord] = useState('');
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
+    const [date_search, setDate_search] = useState(true);
+    const [selectGenre, setSelectGenre] = useState(0);
+    const [searchResult, searchResult_change] = useState([])
+    const [showResult, showResult_change] = useState(false);
+    const [modalState, setModalState] = useState(false);
+    const [items, setItems] = useState([]);
+    const [quote, setQuote] = useState({});
+    const [searchInMain, setSearchInMain] = useState(localStorage.getItem('searchWord') != null ? localStorage.getItem('searchWord') : '');
     
     useEffect(() => {
         var quoteNum = Math.floor(Math.random() * 50) + 1;
@@ -215,10 +215,10 @@ function Search() {
 
 function SearchResult(props) {
 
-    var [searchResult, searchResult_change] = useState(props.result);
-    var [page, setPage] = useState(1);
-    var [pageComp, setPageComp] = useState([]);
-    var [modalData, setModalData] = useState({});
+    const [searchResult, searchResult_change] = useState(props.result);
+    const [page, setPage] = useState(1);
+    const [pageComp, setPageComp] = useState([]);
+    const [modalData, setModalData] = useState({});
     
     useEffect(() => {
         let items = [];
@@ -280,9 +280,10 @@ function SearchResult(props) {
 }
 
 function Moviedetail(props) {
-    var [like, setLike] = useState(false)
-    var [posterUrl, setPosterUrl] = useState('');
-    var [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem('userInfo')));
+    const [posterUrl, setPosterUrl] = useState('');
+    const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem('userInfo')));
+    const [likedList, setLikedList] = useState(JSON.parse(localStorage.getItem('liked')));
+    const [like, setLike] = useState(false)
 
     useEffect(() => {
         axios.get('/public/poster',{
@@ -295,26 +296,43 @@ function Moviedetail(props) {
         })
     }, [props.modalData])
 
+    // useEffect(() => {
+    //     axios.get('/public/isLiked', {
+	// 		params : {
+	// 			email : userInfo.email,
+	// 		}
+	// 	}).then( result => {
+    //         setLikedList(result.data.liked);
+    //         setLike(likedList.includes(props.modalData) ? true : false);
+	// 	})
+    // }, [like])
+    
     useEffect(() => {
-        axios.get('/public/isLiked', {
-			params : {
-				email : userInfo.email,
-			}
-		}).then( result => {
-            console.log(result);
-		})
-    })
+        console.log(likedList);
 
-    const addLike = e => {
-        axios.get('/public/addLike', {
-			params : {
-				email : userInfo.email,
-                movie : props.modalData,
-			}
-		}).then( result => {
-			console.log(result.data.liked);
-		})
-    }
+        if (like) {
+            axios.get('/public/addLike', {
+                params : {
+                    email : userInfo.email,
+                    likedList : likedList,
+                }
+            }).then( result => {
+                // console.log(result.data.liked);
+            })
+        }
+
+        else {
+            axios.get('/public/addLike', {
+                params : {
+                    email : userInfo.email,
+                    likedList : likedList,
+                }
+            }).then( result => {
+                // console.log(result.data.liked);
+            })
+        }
+        
+    }, [like]);
 
     const renderTooltip = (props) => (
         <Tooltip id="button-tooltip" {...props}>
@@ -353,7 +371,18 @@ function Moviedetail(props) {
                             delay={{ show: 50, hide: 50 }}
                             overlay={renderTooltip}
                             >
-                            <button className="btn btn-secondary like" onClick = {() => setLike(!like)} style={
+                            <button className="btn btn-secondary like" onClick = {() => {
+                                var l;
+                                console.log(like);
+                                if (like) {
+                                    l = [likedList.slice(0, -1)];
+                                }
+                                else {
+                                    l = [[...likedList, props.modalData]];
+                                }
+                                setLikedList(l);
+                                setLike(!like);
+                            }} style={
                                 like
                                 ? ({'color' : 'red'})
                                 : null

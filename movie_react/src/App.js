@@ -1,6 +1,6 @@
 import { Navbar, Container, Nav, Modal, Button, Form} from 'react-bootstrap';
 import React, { useEffect, useState } from 'react'
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import './App.css';
 import whale from './img/whale.png';
@@ -12,23 +12,37 @@ import History from './history.js';
 import MyPage from './myPage.js';
 import { authService, firebaseInstance } from './fbase';
 
+
 function App() {
 
 	var [loginModal, setLoginModal] = useState(false);
 	var [loginState, setLoginState] = useState(localStorage.getItem('isLogin') ? true : false);
 	var [userInfo, setUserInfo] = useState(localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : {});
 
+	let history = useHistory();
+
 	const onLogOutClick = () => {
 		authService.signOut();
 		localStorage.removeItem('isLogin');
 		localStorage.removeItem('userInfo');
+		localStorage.removeItem('liked');
 		setLoginState(false);
 		setUserInfo({});
+		history.push('/');
 	}
 
-	// window.addEventListener('unload', () => {
-	// 	onLogOutClick();
-	// });
+	useEffect(() => {
+		if (userInfo != {}) {
+			axios.get('/public/createUserLike', {
+				params : {
+					email : userInfo.email,
+				}
+			}).then( result => {
+				localStorage.setItem('liked', result.data.liked);
+				console.log(result.data.liked);
+			})
+		}
+    }, [userInfo]);
 
 	return (
 		<div className="App">

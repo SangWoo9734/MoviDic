@@ -5,23 +5,16 @@ import ReactDOM from 'react-dom';
 
 import './MyPage.css';
 import user from './img/user.png';
+import no from './img/noimage.png';
 
 function App() {
     
     var [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem('userInfo')));
-    var [likedMovie, setLikedMovie] = useState({})
+    var [likedMovie, setLikedMovie] = useState(JSON.parse(localStorage.getItem('liked')));
 
-    useEffect(() => {
-        axios.get('/public/createUserLike', {
-			params : {
-				email : userInfo.email,
-			}
-		}).then( result => {
-			console.log(result.data.liked);
-		})
+    console.log(likedMovie)
 
-    }, []);
-
+    
     return (
         <div className='container mypage-bg'>
             <Row className=''>
@@ -40,9 +33,9 @@ function App() {
                 <p className="h3 text-center">😎 관심 작품 😎</p>
                 <Col className="mt-3 mypage-movie">
                     {
-                        likedMovie
-                        ? <p className='no-result'>🙄 관심 작품이 없습니다!</p>
-                        : 'HIHI'
+                        likedMovie != {}
+                        ? <LikedMovie likedMovie={likedMovie}/>
+                        : <p className='no-result'>🙄 관심 작품이 없습니다!</p>
                     }
                 </Col>
             </Row>
@@ -52,30 +45,39 @@ function App() {
     )
 }
 
-// function Movie(props) {
+function LikedMovie(props) {
+    
+    const [likeMovie, setLikedMovie] = useState(props.likedMovie);
 
+    console.log(typeof likeMovie);
+    return (
+        <>
+            {
+                likeMovie.map(function(source, i) {
+                    return (
+                    <Col className="mt-3 mb-2" xs={6} md={4} lg={3} key={i}>
+                        <Card  className="searchResult_movie">
+                            <div className="searchResult_img" >
+                                <Card.Img variant="top" src={ source.image === "" ? no : source.image } />
+                            </div>
+                            <Card.Body className="searchReuslt_content">
+                                <Card.Title className="searchResult_title">{source.title.split(/<b>|<\/b>/g).join("")}</Card.Title>
+                                <Card.Title className="searchResult_subtitle">{source.subtitle.split(/<b>|<\/b>/g).join("")}</Card.Title>
+                                
+                                <Card.Text className="searchResult_info mt-4">{source.director.split("|").length > 2 ? source.director.split("|")[0] + ' 외 ' + (source.director.split("|").length - 2) + '명' : source.director.split("|").slice(0, -1).join()} / {source.pubDate}</Card.Text>
+                                <Card.Text className="searchResult_info">평점⭐ {source.userRating}</Card.Text>
+                            </Card.Body>
+                            <div className='cover'></div>
+                        </Card>
+                    </Col>
+                    )
+                })
+            }
+        </>
+        
+    )
 
-//     return (
-//         <Card  className="searchResult_movie" onClick={() => {
-//             props.setModalData(props.source);
-//             props.setModalState(true);
-//         }} >
-//             <div className="searchResult_img" >
-//                 <Card.Img variant="top" src={ props.source.image === "" ? no : props.source.image } />
-//             </div>
-//             <Card.Body className="searchReuslt_content">
-//                 <Card.Title className="searchResult_title">{props.source.title.split(/<b>|<\/b>/g).join("")}</Card.Title>
-//                 <Card.Title className="searchResult_subtitle">{props.source.subtitle.split(/<b>|<\/b>/g).join("")}</Card.Title>
-                
-//                 <Card.Text className="searchResult_info mt-4">{props.source.director.split("|").length > 2 ? props.source.director.split("|")[0] + ' 외 ' + (props.source.director.split("|").length - 2) + '명' : props.source.director.split("|").slice(0, -1).join()} / {props.source.pubDate}</Card.Text>
-//                 <Card.Text className="searchResult_info">평점⭐ {props.source.userRating}</Card.Text>
-//             </Card.Body>
-                
-//             <div className='cover'></div>
-//         </Card>
-//     )
-
-// }
+}
 
 
 
