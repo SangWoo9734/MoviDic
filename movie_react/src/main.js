@@ -14,14 +14,6 @@ function Boxoffice({history}) {
 	var [page, page_change] = useState(1);
 	var [slide, slide_change] = useState(0);
     var [searchWord, setSearchWord] = useState('');
-
-	// const getHtml = async() => {
-	// 	try {
-	// 		return await axios.get('https://movie.naver.com/movie/running/current.naver');
-	// 	} catch (err){
-	// 		console.log(err);
-	// 	}
-	// }
 	
 	useEffect(() => {
 
@@ -30,7 +22,6 @@ function Boxoffice({history}) {
 			.then(response => {
 				var json = response.data.result;
 				top10_change(json);
-				// console.log(json);
 			})
 
 		} catch {
@@ -48,7 +39,6 @@ function Boxoffice({history}) {
             
             <Form className='boxoffice-search' onSubmit={handlerSubmit}>
                 <img src={search} className = 'boxoffice-search-button'/>
-                {/* <div className= 'boxoffice-search-button text-center'>🔎</div> */}
                 <Form.Group className="boxoffice-search-input">
                     <Form.Control type="text" placeholder="영화 검색" onChange={ e => {
                         setSearchWord(e.target.value);

@@ -39,7 +39,6 @@ function App() {
 				}
 			}).then( result => {
 				localStorage.setItem('liked', result.data.liked);
-				console.log(result.data.liked);
 			})
 		}
     }, [userInfo]);
@@ -87,9 +86,6 @@ function App() {
 				</Switch>
 			</BrowserRouter>
 
-			{/* <div className='footer'>
-				<p>CopyRight By Sangwoo</p>
-			</div> */}
 		</div>
 	);
 }

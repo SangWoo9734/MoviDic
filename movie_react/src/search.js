@@ -282,8 +282,9 @@ function SearchResult(props) {
 function Moviedetail(props) {
     const [posterUrl, setPosterUrl] = useState('');
     const [userInfo, setUserInfo] = useState(JSON.parse(localStorage.getItem('userInfo')));
-    const [likedList, setLikedList] = useState(JSON.parse(localStorage.getItem('liked')));
-    const [like, setLike] = useState(false)
+    const [likedList, setLikedList] = useState(localStorage.getItem('liked') ? JSON.parse(localStorage.getItem('liked')) : []);
+    const [like, setLike] = useState(Object.keys(likedList).includes(props.modalData.link.split('=')[1]));
+
 
     useEffect(() => {
         axios.get('/public/poster',{
@@ -294,44 +295,18 @@ function Moviedetail(props) {
         .then(res => {
             setPosterUrl(res.data);
         })
-    }, [props.modalData])
-
-    // useEffect(() => {
-    //     axios.get('/public/isLiked', {
-	// 		params : {
-	// 			email : userInfo.email,
-	// 		}
-	// 	}).then( result => {
-    //         setLikedList(result.data.liked);
-    //         setLike(likedList.includes(props.modalData) ? true : false);
-	// 	})
-    // }, [like])
+    }, [])
     
     useEffect(() => {
-        console.log(likedList);
-
-        if (like) {
+        if (userInfo) {
+            localStorage.setItem('liked', JSON.stringify(likedList));
             axios.get('/public/addLike', {
                 params : {
                     email : userInfo.email,
                     likedList : likedList,
                 }
-            }).then( result => {
-                // console.log(result.data.liked);
             })
         }
-
-        else {
-            axios.get('/public/addLike', {
-                params : {
-                    email : userInfo.email,
-                    likedList : likedList,
-                }
-            }).then( result => {
-                // console.log(result.data.liked);
-            })
-        }
-        
     }, [like]);
 
     const renderTooltip = (props) => (
@@ -372,16 +347,31 @@ function Moviedetail(props) {
                             overlay={renderTooltip}
                             >
                             <button className="btn btn-secondary like" onClick = {() => {
-                                var l;
-                                console.log(like);
-                                if (like) {
-                                    l = [likedList.slice(0, -1)];
+                                if (!userInfo){
+                                    alert('로그인 해주세요😁');
                                 }
                                 else {
-                                    l = [[...likedList, props.modalData]];
+                                    var l = {};
+                                    let code = props.modalData.link.split('=')[1]
+                                    let key = Object.keys(likedList);
+                                    if (like) {
+                                        for (let i = 0; i < key.length; i++){
+                                            if (key[i] !== code)
+                                                l[key[i]] = likedList[key[i]]
+                                        }   
+                                    }
+                                    else {
+                                        if (likedList !== []){
+                                            for (let i = 0; i < key.length; i++){
+                                                l[key[i]] = likedList[key[i]]
+                                            }   
+                                        }
+                                        l[code] = (props.modalData);
+                                    
+                                    }
+                                    setLikedList(l);
+                                    setLike(!like);
                                 }
-                                setLikedList(l);
-                                setLike(!like);
                             }} style={
                                 like
                                 ? ({'color' : 'red'})

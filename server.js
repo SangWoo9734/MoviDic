@@ -362,12 +362,12 @@ app.get('/public/addLike', function(req, res) {
     });
 })
 
-// app.get('/public/undoLike', function(req, res) {
+app.get('/public/undoLike', function(req, res) {
     
-//     db.collection('top10').insertOne(rate, function (err, result){
-//         if (err) return console.log(err);
-//     });
-// })
+    db.collection('top10').insertOne(rate, function (err, result){
+        if (err) return console.log(err);
+    });
+})
 
 app.get('/', function(req, res) {
     // res.header('Access-Control-Allow-Origin', '*');

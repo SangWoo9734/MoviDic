@@ -49,11 +49,11 @@ function LikedMovie(props) {
     
     const [likeMovie, setLikedMovie] = useState(props.likedMovie);
 
-    console.log(typeof likeMovie);
+    console.log(likeMovie);
     return (
-        <>
+        <Row>
             {
-                likeMovie.map(function(source, i) {
+                Object.values(likeMovie).map(function(source, i) {
                     return (
                     <Col className="mt-3 mb-2" xs={6} md={4} lg={3} key={i}>
                         <Card  className="searchResult_movie">
@@ -73,7 +73,7 @@ function LikedMovie(props) {
                     )
                 })
             }
-        </>
+        </Row>
         
     )
 
