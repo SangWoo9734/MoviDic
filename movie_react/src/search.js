@@ -24,9 +24,10 @@ function Search() {
     const [endDate, setEndDate] = useState(new Date());
     const [date_search, setDate_search] = useState(true);
     const [selectGenre, setSelectGenre] = useState(0);
-    const [searchResult, searchResult_change] = useState([])
-    const [showResult, showResult_change] = useState(false);
+    const [searchResult, setSearchResult] = useState([])
+    const [showResult, setShowResult] = useState(false);
     const [modalState, setModalState] = useState(false);
+    const [sortPoint, setSortPoint] = useState(false);
     const [items, setItems] = useState([]);
     const [quote, setQuote] = useState({});
     const [searchInMain, setSearchInMain] = useState(localStorage.getItem('searchWord') != null ? localStorage.getItem('searchWord') : '');
@@ -38,7 +39,7 @@ function Search() {
             params : {
                 q : quoteNum,
             }
-        }).then( result => {
+        }).then( result => { 
             setQuote(result.data);
         })
 
@@ -84,22 +85,24 @@ function Search() {
         })
         .then(res => {
             var result = res.data;
-
+            
             result.sort(function (a, b) {
-                if (a.pubDate > b.pubDate) {
+                if (a.userRating > b.userRating) {
                   return -1;
                 }
-                if (a.pubDate < b.pubDate) {
+                if (a.userRating < b.userRating) {
                   return 1;
                 }
                 // a must be equal to b
                 return 0;
               });
-            showResult_change(false); // Component 재랜더링을 위해 검색결과를 없애기
-            searchResult_change(result);
-            showResult_change(true);
+            setShowResult(false); // Component 재랜더링을 위해 검색결과를 없애기
+            setSearchResult(result);
+            setShowResult(true);
         });
     }
+
+    
 
     return (
         <div className='container mt-4'>
@@ -203,10 +206,9 @@ function Search() {
                 </Form>
 
             </div>
-            
             {
                 showResult
-                ? <SearchResult word={searchWord} result={searchResult} modalState={modalState} setModalState={setModalState} className="pb-5"/>
+                ? <SearchResult word={searchInMain ? searchInMain : searchWord} result={searchResult} modalState={modalState} setShowResult={setShowResult} setModalState={setModalState} className="pb-5"/>
                 : null
             }
         </div>
@@ -215,7 +217,7 @@ function Search() {
 
 function SearchResult(props) {
 
-    const [searchResult, searchResult_change] = useState(props.result);
+    const [searchResult, setSearchResult] = useState(props.result);
     const [page, setPage] = useState(1);
     const [pageComp, setPageComp] = useState([]);
     const [modalData, setModalData] = useState({});
@@ -234,25 +236,44 @@ function SearchResult(props) {
         }
         setPageComp(items);
     }, [page])
-    
-    
+
+    useEffect(() => {
+        props.setShowResult(false); // Component 재랜더링을 위해 검색결과를 없애기
+        props.setShowResult(true);
+    },[searchResult])
+
+    var sort_data = ((result, sortPoint) => {
+        
+        var option = { 0 : 'title', 1 : 'pubDate', 2 : 'userRating'}
+        console.log(result);
+        result.sort(function (a, b) {
+            if (a[option[sortPoint]] > b[option[sortPoint]]) {
+              return -1;
+            }
+            if (a[option[sortPoint]] < b[option[sortPoint]]) {
+              return 1;
+            }
+            // a must be equal to b
+            return 0;
+        });
+
+        setSearchResult([...result]);
+    })
 
     return (
         <div className='container mt-5'>
-            <div>
-                <h2 style={{float:'left', margin:'0'}}><span className='h2 text-primary'>"{props.word}"</span> 에 대한 검색결과</h2>
-                
-                <p style={{float:'right'}}>총 <span className='h3 text-primary'>{searchResult.length}</span> 개</p>
-                <DropdownButton id="dropdown-basic-button" title="Filter" style={{float:'right'}} onChange={() => {console.log(1)}}>
-                    <Dropdown.Item >이름</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">연도</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">평점 높은 순</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">평점 낮은 순</Dropdown.Item>
-                </DropdownButton>
-            </div>
-            <div style={{clear : 'both'}}></div>
-            <hr style={{marginTop : '0'}}/>
-
+             <div className= "mt-5">
+                        <h2 style={{float:'left', margin:'0'}}><span className='h2 text-primary'>"{props.word}"</span> 에 대한 검색결과</h2>
+                        
+                        <p style={{float:'right'}}>총 <span className='h3 text-primary'>{searchResult.length}</span> 개</p>
+                        <DropdownButton id="dropdown-basic-button" title="Filter" style={{float:'right'}} onChange={() => {console.log(1)}}>
+                            <Dropdown.Item onClick={() => sort_data(searchResult, 0)}>이름</Dropdown.Item>
+                            <Dropdown.Item onClick={() => sort_data(searchResult, 1)}>최신 순</Dropdown.Item>
+                            <Dropdown.Item onClick={() => sort_data(searchResult, 2)}>평점 높은 순</Dropdown.Item>
+                        </DropdownButton>
+                    </div>
+                    <div style={{clear : 'both'}}></div>
+                    <hr style={{marginTop : '0'}}/>
             <div className='row searchResult-list'>
                 <Row style={{margin : 'auto'}}>
                     {
@@ -379,10 +400,6 @@ function Moviedetail(props) {
                             }> ♥ </button>
                         </OverlayTrigger>
                         
-                    </Col>
-                    <hr className="mt-3 mb-3"/>
-                    <Col xs={12} className="modal-analy">
-                        <p>여기에 뭐 넣지</p>
                     </Col>
                 </Row>
                 
