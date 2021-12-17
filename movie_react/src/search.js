@@ -105,7 +105,7 @@ function Search() {
     
 
     return (
-        <div className='container mt-4'>
+        <div className='container mt-4 pb-2'>
             <div className='top-box mt-5 mb-5'>
                 <div className='top-title h1'>SEARCH MOVIE</div>
                 <div className=''>
@@ -261,19 +261,19 @@ function SearchResult(props) {
     })
 
     return (
-        <div className='container mt-5'>
-             <div className= "mt-5">
-                        <h2 style={{float:'left', margin:'0'}}><span className='h2 text-primary'>"{props.word}"</span> 에 대한 검색결과</h2>
-                        
-                        <p style={{float:'right'}}>총 <span className='h3 text-primary'>{searchResult.length}</span> 개</p>
-                        <DropdownButton id="dropdown-basic-button" title="Filter" style={{float:'right'}} onChange={() => {console.log(1)}}>
-                            <Dropdown.Item onClick={() => sort_data(searchResult, 0)}>이름</Dropdown.Item>
-                            <Dropdown.Item onClick={() => sort_data(searchResult, 1)}>최신 순</Dropdown.Item>
-                            <Dropdown.Item onClick={() => sort_data(searchResult, 2)}>평점 높은 순</Dropdown.Item>
-                        </DropdownButton>
-                    </div>
-                    <div style={{clear : 'both'}}></div>
-                    <hr style={{marginTop : '0'}}/>
+        <div className='container mt-5 mb-5'>
+            <div className= "mt-5">
+                <h2 style={{float:'left', margin:'0'}}><span className='h2 text-primary'>"{props.word}"</span> 에 대한 검색결과</h2>
+                
+                <p style={{float:'right'}}>총 <span className='h3 text-primary'>{searchResult.length}</span> 개</p>
+                <DropdownButton id="dropdown-basic-button" title="Filter" style={{float:'right'}} onChange={() => {console.log(1)}}>
+                    <Dropdown.Item onClick={() => sort_data(searchResult, 0)}>이름</Dropdown.Item>
+                    <Dropdown.Item onClick={() => sort_data(searchResult, 1)}>최신 순</Dropdown.Item>
+                    <Dropdown.Item onClick={() => sort_data(searchResult, 2)}>평점 높은 순</Dropdown.Item>
+                </DropdownButton>
+            </div>
+            <div style={{clear : 'both'}}></div>
+            <hr style={{marginTop : '0'}}/>
             <div className='row searchResult-list'>
                 <Row style={{margin : 'auto'}}>
                     {
@@ -295,7 +295,7 @@ function SearchResult(props) {
                 : null
             }
 
-            <Pagination>{pageComp}</Pagination>
+            <Pagination className="">{pageComp}</Pagination>
         </div>
     )
 }

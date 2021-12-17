@@ -49,7 +49,7 @@
 }
   
 .history-date .react-datepicker-popper[data-placement^=bottom] .react-datepicker__triangle::after, .history-date .react-datepicker-popper[data-placement^=bottom] .react-datepicker__triangle::before {
-left : -170px !important;
+left : -35px !important;
 }
 
 .history-date .react-datepicker__year-wrapper *{
@@ -80,7 +80,7 @@ margin : auto !important;
 }
 
 .history-updown {
-    font-size : 15px;
+    font-size : 14px;
 }
 
 .history-title {
@@ -101,7 +101,7 @@ margin : auto !important;
 
 .accordion-button {
     padding : 12px;
-    background :rgb(0, 0, 0, 0.3)
+    background :rgba(0, 0, 0, 0.075)
 }
 
 .accordion-item {
