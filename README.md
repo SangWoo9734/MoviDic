@@ -21,7 +21,7 @@
     영화 검색 기능 제공을 목적으로 하는 웹 서비스
     <br />
     <br />
-    <a href="https://www.notion.so/Thunder-Search-System-9a506f6218484044a12101888d212238"><strong>Notion Docs »</strong></a>
+    <a href="https://www.notion.so/MoviDic-with-React-0da06ab0603b4b8fbe93d87010a07ff2"><strong>Notion Docs »</strong></a>
     <br />
     <br />
   </p>
